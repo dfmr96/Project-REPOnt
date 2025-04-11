@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class MainPanel : MonoBehaviour
 {
+
     public void ExitGame() { Application.Quit(); }
 }
