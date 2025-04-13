@@ -9,7 +9,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public static ConnectionManager Instance;
     public Action OnConnectToMaster;
     public Action OnRoomCreated;
-    public Action<string> OnRoomJoinUpdated;
     [SerializeField] private int sceneToLoad = 1;
 
     private void Awake()
@@ -47,11 +46,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(roomId);
     }
 
-    public override void OnJoinRoomFailed(short returnCode, string message) { OnRoomJoinUpdated.Invoke(message); }
-
     public override void OnJoinedRoom()
     {
-        OnRoomJoinUpdated.Invoke("");
         PhotonNetwork.NickName = "Player" + PhotonNetwork.PlayerList.Length;
         Debug.Log("Jugador unido a sala: " + PhotonNetwork.CurrentRoom.Name);
         Debug.Log("Jugadores en la sala: " + PhotonNetwork.CurrentRoom.PlayerCount);

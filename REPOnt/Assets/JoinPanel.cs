@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class JoinPanel : MonoBehaviour
 {
-    private void Start() { ConnectionManager.Instance.OnRoomJoinUpdated += CheckStatus; }
     public void OnInputEnd(string text) 
     {
         if (string.IsNullOrEmpty(text))
@@ -24,6 +23,4 @@ public class JoinPanel : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(status)) Debug.LogWarning(status);
     }
-
-    private void OnDisable() { ConnectionManager.Instance.OnRoomJoinUpdated -= CheckStatus; }
 }
