@@ -9,6 +9,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public static ConnectionManager Instance;
     public Action OnConnectToMaster;
     public Action OnRoomCreated;
+    public Action<int> OnRoomJoined;
     public Action<string> OnRoomJoinUpdated;
     [SerializeField] private int sceneToLoad = 1;
 
@@ -35,7 +36,11 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(GenerateId());
     }
 
-    public override void OnCreatedRoom() { OnRoomCreated.Invoke(); }
+    public override void OnCreatedRoom() 
+    { 
+        OnRoomCreated.Invoke();
+        OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
+    }
 
     public string GetRunId() {  return PhotonNetwork.CurrentRoom.Name; }
 
@@ -51,12 +56,13 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        OnRoomJoinUpdated.Invoke("");
-        PhotonNetwork.NickName = "Player" + PhotonNetwork.PlayerList.Length;
-        Debug.Log("Jugador unido a sala: " + PhotonNetwork.CurrentRoom.Name);
-        Debug.Log("Jugadores en la sala: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        OnRoomJoinUpdated?.Invoke("");
+        PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
+        OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 5) PhotonNetwork.LoadLevel(sceneToLoad);
     }
+
+    public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
 
     private string GenerateId()
     {

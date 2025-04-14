@@ -1,29 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class JoinPanel : MonoBehaviour
 {
-    private void Start() { ConnectionManager.Instance.OnRoomJoinUpdated += CheckStatus; }
-    public void OnInputEnd(string text) 
+    [SerializeField] private TMP_InputField input;
+    [SerializeField] private TextMeshProUGUI playersText;
+    private void OnEnable()
     {
-        if (string.IsNullOrEmpty(text))
+        ConnectionManager.Instance.OnRoomJoinUpdated += CheckStatus;
+        ConnectionManager.Instance.OnRoomJoined += GetPlayers;
+    }
+    public void OnInputEnd() 
+    {
+        if (string.IsNullOrEmpty(input.text))
         {
             Debug.LogWarning("El codigo de la sala esta vacio");
             return;
         }
-        if (text.Length != 6)
+        if (input.text.Length != 6)
         {
             Debug.LogWarning("El codigo de la sala debe tener 6 caracteres");
             return;
         }
-        Debug.Log("Intentando unirse con el codigo: " + text);
-        ConnectionManager.Instance.JoinRoom(text);
+        Debug.Log("Intentando unirse con el codigo: " + input.text);
+        ConnectionManager.Instance.JoinRoom(input.text);
     }
     private void CheckStatus(string status)
     {
         if (!string.IsNullOrEmpty(status)) Debug.LogWarning(status);
+        input.text = status;
     }
 
-    private void OnDisable() { ConnectionManager.Instance.OnRoomJoinUpdated -= CheckStatus; }
+    private void GetPlayers(int quantity) { playersText.text = quantity + "/6"; }
+
+    private void OnDisable() 
+    { 
+        ConnectionManager.Instance.OnRoomJoinUpdated -= CheckStatus;
+        ConnectionManager.Instance.OnRoomJoined -= GetPlayers;
+    }
 }
