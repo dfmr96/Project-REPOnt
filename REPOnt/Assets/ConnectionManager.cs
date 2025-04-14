@@ -29,7 +29,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();
     }
 
-    public override void OnConnectedToMaster() { OnConnectToMaster.Invoke(); }
+    public override void OnConnectedToMaster() { OnConnectToMaster?.Invoke(); }
 
     public void CreateRoom()
     {
@@ -39,8 +39,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom() 
     { 
-        OnRoomCreated.Invoke();
-        OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
+        OnRoomCreated?.Invoke();
+        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
     }
 
     public string GetRunId() {  return PhotonNetwork.CurrentRoom.Name; }
@@ -48,9 +48,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public void JoinRoom(string roomId)
     {
         if (!PhotonNetwork.IsConnected) return;
-
-        Debug.Log("Intentando unirse a sala: " + roomId);
-        OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
         PhotonNetwork.JoinRoom(roomId);
     }
 
@@ -58,14 +55,15 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        OnRoomJoinUpdated?.Invoke("");
+        OnRoomJoinUpdated?.Invoke("Joined");
         PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
+        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 5) PhotonNetwork.LoadLevel(sceneToLoad);
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer) { OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
+    public override void OnPlayerEnteredRoom(Player newPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
+    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
 
     public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
 

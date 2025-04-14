@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class JoinPanel : MonoBehaviour
 {
     [SerializeField] private TMP_InputField input;
     [SerializeField] private TextMeshProUGUI playersText;
+    [SerializeField] private Button button;
     private void OnEnable()
     {
         ConnectionManager.Instance.OnRoomJoinUpdated += CheckStatus;
@@ -26,6 +28,8 @@ public class JoinPanel : MonoBehaviour
         }
         Debug.Log("Intentando unirse con el codigo: " + input.text);
         ConnectionManager.Instance.JoinRoom(input.text);
+        input.interactable = false;
+        button.interactable = false;
     }
     private void CheckStatus(string status)
     {
