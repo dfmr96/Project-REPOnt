@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using System;
+using Photon.Realtime;
 
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
@@ -49,6 +50,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsConnected) return;
 
         Debug.Log("Intentando unirse a sala: " + roomId);
+        OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
         PhotonNetwork.JoinRoom(roomId);
     }
 
@@ -58,9 +60,12 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     {
         OnRoomJoinUpdated?.Invoke("");
         PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
-        OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 5) PhotonNetwork.LoadLevel(sceneToLoad);
     }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer) { OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
 
     public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
 
