@@ -18,15 +18,14 @@ public class JoinPanel : MonoBehaviour
     {
         if (string.IsNullOrEmpty(input.text))
         {
-            Debug.LogWarning("El codigo de la sala esta vacio");
+            input.text = "El codigo de la sala esta vacio";
             return;
         }
         if (input.text.Length != 6)
         {
-            Debug.LogWarning("El codigo de la sala debe tener 6 caracteres");
+            input.text = "El codigo de la sala debe tener 6 caracteres";
             return;
         }
-        Debug.Log("Intentando unirse con el codigo: " + input.text);
         ConnectionManager.Instance.JoinRoom(input.text);
         input.interactable = false;
         button.interactable = false;

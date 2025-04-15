@@ -58,10 +58,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         OnRoomJoinUpdated?.Invoke("Joined");
         PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
         OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 5) PhotonNetwork.LoadLevel(sceneToLoad);
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2) PhotonNetwork.LoadLevel(sceneToLoad);
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
+    public override void OnPlayerEnteredRoom(Player newPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); if (PhotonNetwork.CurrentRoom.PlayerCount >= 2) PhotonNetwork.LoadLevel(sceneToLoad); }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
 
