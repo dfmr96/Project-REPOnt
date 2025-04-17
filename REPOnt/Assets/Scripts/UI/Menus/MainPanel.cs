@@ -7,11 +7,20 @@ public class MainPanel : MonoBehaviour
 {
     [SerializeField] private Button hostButton;
     [SerializeField] private Button joinButton;
-    private void Start() { ConnectionManager.Instance.OnConnectToMaster += CheckButtons; }
+    [SerializeField] private Button joinRandomButton;
+    private void Start()
+    {
+        ConnectionManager.Instance.OnConnectToMaster += CheckButtons;
+    }
     private void CheckButtons() 
     {
         hostButton.interactable = true;
         joinButton.interactable = true;
+        joinRandomButton.interactable = true;
     }
-    public void ExitGame() { Application.Quit(); }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
