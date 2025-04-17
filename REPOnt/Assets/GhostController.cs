@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class GhostController : MonoBehaviour
+public class GhostController : PlayerBase
 {
     [Header("Interaction")]
     [SerializeField] private float interactionRange = 5f;
@@ -21,14 +18,16 @@ public class GhostController : MonoBehaviour
     private float interactTimer = 0;
     private PhotonView photonView;
 
-    private void Start()
+
+    protected override void Awake()
     {
-        photonView = GetComponent<PhotonView>();
+        base.Awake();
         teleportTarget = GameManager.Instance.PrisonPoint;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         if (!photonView.IsMine) return;
 
         interactTimer += Time.deltaTime;
@@ -39,10 +38,7 @@ public class GhostController : MonoBehaviour
 #if UNITY_EDITOR
         DebugHighlightMover(origin, direction);
 #endif
-        if (Input.GetKeyDown(KeyCode.E) && interactTimer > interactCooldown)
-        {
-            TryInteract(origin, direction);
-        }
+        if (Input.GetKeyDown(KeyCode.E) && interactTimer > interactCooldown) TryInteract(origin, direction);
     }
 
     private void TryInteract(Vector3 origin, Vector3 direction)
