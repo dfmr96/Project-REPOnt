@@ -8,7 +8,12 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject hostPanel;
     [SerializeField] private GameObject joinPanel;
-    public void CreateRoom() { ConnectionManager.Instance.CreateRoom(); ConnectionManager.Instance.OnRoomCreated += OnRoomCreated; }
+
+    public void CreateRoom()
+    {
+        ConnectionManager.Instance.CreateRoom(); 
+        ConnectionManager.Instance.OnRoomCreated += OnRoomCreated;
+    }
 
     private void OnRoomCreated() 
     { 
@@ -23,6 +28,5 @@ public class MainMenuManager : MonoBehaviour
         joinPanel.SetActive(true);
         mainPanel.SetActive(false);
     }
-
 
 }
