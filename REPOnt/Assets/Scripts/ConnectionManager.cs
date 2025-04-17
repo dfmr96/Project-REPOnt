@@ -12,7 +12,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public Action<int> OnRoomJoined;
     public Action<string> OnRoomJoinUpdated;
     [SerializeField] private int sceneToLoad = 1;
-    private const int MinPlayersRequired = 3;
+    private const int MinPlayersRequired = 2;
 
     private void Awake()
     {
@@ -55,18 +55,13 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(roomId);
     }
 
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        OnRoomJoinUpdated.Invoke(message);
-    }
+    public override void OnJoinRoomFailed(short returnCode, string message) { OnRoomJoinUpdated.Invoke(message); }
 
     public override void OnJoinedRoom()
     {
         OnRoomJoinUpdated?.Invoke("Joined");
         PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
         OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-        //if (PhotonNetwork.CurrentRoom.PlayerCount >= 2) PhotonNetwork.LoadLevel(sceneToLoad);
-        //El LoadLevel manda a todos a cargar la escena, solo lo debe hacer el master client cuando se cumpla el minimo de jugadores
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -81,10 +76,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-    }
+    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
 
     public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
 

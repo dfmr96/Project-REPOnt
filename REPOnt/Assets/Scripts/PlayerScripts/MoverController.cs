@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PlayerScripts
 {
-    public class MoverController : MonoBehaviourPun
+    public class MoverController : PlayerBase
     {
         [Header("Interaction")]
         [SerializeField] private float interactRange = 3f;
@@ -25,10 +25,10 @@ namespace PlayerScripts
         {
             CurrentHandObject.SetActive(false);
         }
-        
-        private void Update()
+
+        protected override void Update()
         {
-            if (!photonView.IsMine) return;
+            base.Update();
 
             if (Input.GetKeyDown(interactKey))
             {

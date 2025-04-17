@@ -3,65 +3,68 @@ using UnityEngine;
 
 namespace PlayerScripts
 {
-    public class GhostController : MonoBehaviour
+    public class GhostController : PlayerBase
     {
-        [Header("Interaction")]
-        [SerializeField] private float interactionRange = 5f;
+        [Header("Interaction")] [SerializeField]
+        private float interactionRange = 5f;
+
         [SerializeField] private float interactCooldown = 3f;
         [SerializeField] private Transform teleportTarget;
 
 #if UNITY_EDITOR
-        [Header("Debug Highlight")]
-        [SerializeField] private Color debugHighlightColor = Color.yellow;
+        [Header("Debug Highlight")] [SerializeField]
+        private Color debugHighlightColor = Color.yellow;
+
         private Renderer lastDebugRenderer;
         private Color lastOriginalColor;
 #endif
-    
-        private float interactTimer = 0;
-        private PhotonView photonView;
 
-        private void Start()
+        private float interactTimer = 0;
+
+        protected override void Awake()
         {
-            photonView = GetComponent<PhotonView>();
+            base.Awake();
             teleportTarget = GameManager.Instance.PrisonPoint;
         }
 
-        private void Update()
+        protected override void Update()
         {
-            if (!photonView.IsMine) return;
+            base.Update();
 
             interactTimer += Time.deltaTime;
-        
+
             Vector3 origin = transform.position;
             Vector3 direction = transform.forward;
-        
+
 #if UNITY_EDITOR
             DebugHighlightMover(origin, direction);
 #endif
-            if (Input.GetKeyDown(KeyCode.E) && interactTimer > interactCooldown)
-            {
-                TryInteract(origin, direction);
-            }
+            if (Input.GetKeyDown(KeyCode.E) && interactTimer > interactCooldown) TryInteract(origin, direction);
         }
 
         private void TryInteract(Vector3 origin, Vector3 direction)
         {
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactionRange))
             {
+                Debug.Log(
+                    $"[TryInteract] Hit: {hit.collider.name}, Tag: {hit.collider.tag}, Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+
                 if (!hit.collider.CompareTag("Mover")) return;
 
                 if (hit.collider.TryGetComponent<PhotonView>(out PhotonView targetPV))
                 {
+                    Debug.Log($"[GhostInteraction] Hit mover: {targetPV.name}");
                     targetPV.RPC("TeleportToLocation", targetPV.Owner, teleportTarget.position);
                     interactTimer = 0f;
                 }
             }
         }
-    
+
 #if UNITY_EDITOR
         private void DebugHighlightMover(Vector3 origin, Vector3 direction)
         {
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, interactionRange) && hit.collider.CompareTag("Mover"))
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, interactionRange) &&
+                hit.collider.CompareTag("Mover"))
             {
                 if (hit.collider.TryGetComponent(out Renderer rend))
                 {
@@ -90,7 +93,7 @@ namespace PlayerScripts
             }
         }
 #endif
-    
+
         private void OnDrawGizmos()
         {
             Vector3 origin = transform.position;

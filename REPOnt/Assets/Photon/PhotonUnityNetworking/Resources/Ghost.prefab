@@ -188,8 +188,6 @@ GameObject:
   - component: {fileID: 6186044115555836862}
   - component: {fileID: 7574823792758471194}
   - component: {fileID: 2863269862072906654}
-  - component: {fileID: 6958189442342148364}
-  - component: {fileID: 4815389642044984218}
   - component: {fileID: 3350648802145381551}
   - component: {fileID: -3488871421456548828}
   - component: {fileID: 1111213847345604943}
@@ -317,33 +315,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &6958189442342148364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5479790456120119676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305642c6f049c2f4f985ed0003c86c68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smoothTime: 10
---- !u!114 &4815389642044984218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5479790456120119676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8046612fa3b0ab4b91a08dcc0b26026, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 8369a2ddada21cf4ea7c8025ee79bce9, type: 2}
-  playerCamera: {fileID: 1193260903549206958}
 --- !u!114 &3350648802145381551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,7 +334,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6958189442342148364}
   - {fileID: 1111213847345604943}
   sceneViewId: 0
   InstantiationId: 0
@@ -380,6 +350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6247b0473510c3244b9015da37ae186c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: bc0b9039ee7ab104ea01beef2015f86f, type: 2}
+  playerCamera: {fileID: 1193260903549206958}
   interactionRange: 5
   interactCooldown: 3
   teleportTarget: {fileID: 0}
