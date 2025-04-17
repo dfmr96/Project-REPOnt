@@ -16,7 +16,6 @@ public class GhostController : PlayerBase
 #endif
     
     private float interactTimer = 0;
-    private PhotonView photonView;
 
 
     protected override void Awake()

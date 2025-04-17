@@ -1,23 +1,29 @@
+using System;
 using Photon.Pun;
+using PlayerScripts;
 using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
     [SerializeField] private PlayerData data;
     [SerializeField] private Camera playerCamera;
-    private PhotonView photonView;
+    protected PhotonView photonView;
     private Vector3 rotation = Vector3.zero;
     private float cameraAngle;
     protected virtual void Awake() { photonView = GetComponent<PhotonView>(); }
 
-    protected virtual void Update()
+    private void Start()
     {
         if (!photonView.IsMine)
         {
             playerCamera.enabled = false;
             playerCamera.GetComponent<AudioListener>().enabled = false;
-            return;
         }
+    }
+
+    protected virtual void Update()
+    {
+        if (!photonView.IsMine) return;
         Move();
         Look();
     }

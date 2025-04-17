@@ -188,7 +188,6 @@ GameObject:
   - component: {fileID: 6186044115555836862}
   - component: {fileID: 7574823792758471194}
   - component: {fileID: 2863269862072906654}
-  - component: {fileID: 4815389642044984218}
   - component: {fileID: 3350648802145381551}
   - component: {fileID: -307759398742583435}
   - component: {fileID: -101943958894553214}
@@ -317,20 +316,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &4815389642044984218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5479790456120119676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8046612fa3b0ab4b91a08dcc0b26026, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 8369a2ddada21cf4ea7c8025ee79bce9, type: 2}
-  playerCamera: {fileID: 1193260903549206958}
 --- !u!114 &3350648802145381551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,6 +384,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2efae4bdb9f024980767209f19916c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 8369a2ddada21cf4ea7c8025ee79bce9, type: 2}
+  playerCamera: {fileID: 1193260903549206958}
   interactRange: 3
   interactKey: 101
   currentHandObject: {fileID: 5908596995860277552}
