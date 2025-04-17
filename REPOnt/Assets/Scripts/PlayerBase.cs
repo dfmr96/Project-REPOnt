@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
-    [SerializeField] private PlayerData data;
+    [SerializeField] private PlayerScripts.PlayerData data;
     [SerializeField] private Camera playerCamera;
     private PhotonView photonView;
     private Vector3 rotation = Vector3.zero;
