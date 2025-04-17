@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         float v = Input.GetAxis("Vertical");
 
         Vector3 move = new Vector3(h, 0, v);
-        transform.Translate(move * Time.deltaTime * data.NormalSpeed);
+        transform.Translate(move * (Time.deltaTime * data.NormalSpeed));
     }
 
     private void Look() 
@@ -42,5 +42,11 @@ public class PlayerController : MonoBehaviour
 
         transform.Rotate(Vector3.up * rotation.x);
         playerCamera.transform.localRotation = Quaternion.Euler(-cameraAngle, 0, 0);
+    }
+    
+    [PunRPC]
+    public void TeleportToLocation(Vector3 newPosition)
+    {
+        transform.position = newPosition;
     }
 }

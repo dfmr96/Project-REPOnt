@@ -109,7 +109,23 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         var players = PhotonNetwork.PlayerList;
         if (players.Length < minPlayersRequired) return;
 
-        int ghostIndex = UnityEngine.Random.Range(0, players.Length);
+        int ghostIndex = 0;
+        
+#if UNITY_EDITOR
+    // El Ghost será siempre el MasterClient (jugador que crea la sala)
+        Player master = PhotonNetwork.MasterClient;
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i] == master)
+            {
+                ghostIndex = i;
+                break;
+            }
+        }
+#else
+        //En builds normales: Ghost aleatorio
+        ghostIndex = UnityEngine.Random.Range(0, players.Length);
+#endif
 
         for (int i = 0; i < players.Length; i++)
         {
