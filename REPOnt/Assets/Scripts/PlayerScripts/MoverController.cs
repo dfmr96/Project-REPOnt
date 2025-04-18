@@ -12,12 +12,13 @@ namespace PlayerScripts
 
         [SerializeField] GameObject currentHandObject;
 
+        public int objectId;
+
         public GameObject CurrentHandObject => currentHandObject;
 
         public void Equip()
         {
             if (CurrentHandObject.activeSelf) return;
-        
             CurrentHandObject.SetActive(true);
         }
 
@@ -41,12 +42,13 @@ namespace PlayerScripts
 
                 if (hit.collider.TryGetComponent(out PickupObject pickup))
                 {
+                    objectId = pickup.GetObjectId();
                     pickup.Interact(photonView);
                     Debug.Log("PickupObject Interacted");
                 }
                 else if (hit.collider.TryGetComponent(out DropZone dropZone))
                 {
-                    dropZone.Interact(photonView, CurrentHandObject);
+                    dropZone.Interact(photonView, objectId);
                     Debug.Log("DropZone Interacted");
                 }
             }

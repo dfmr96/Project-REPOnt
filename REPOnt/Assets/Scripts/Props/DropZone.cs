@@ -10,10 +10,10 @@ namespace Props
         [SerializeField] private ObjectData data;
         private bool isPlaced = false;
 
-        public void Interact(PhotonView playerPhotonView, GameObject _object)
+        public void Interact(PhotonView playerPhotonView, int objectId)
         {
             if (isPlaced) return;
-            if (_object.GetComponent<PickupObject>().GetObjectId() != data.id) return;
+            if (objectId != data.id) return;
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
 

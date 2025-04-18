@@ -389,6 +389,7 @@ MonoBehaviour:
   interactRange: 3
   interactKey: 101
   currentHandObject: {fileID: 5908596995860277552}
+  objectId: 0
 --- !u!1 &5908596995860277552
 GameObject:
   m_ObjectHideFlags: 0
