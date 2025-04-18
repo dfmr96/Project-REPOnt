@@ -7,12 +7,13 @@ namespace Props
     public class DropZone : MonoBehaviourPun
     {
         [SerializeField] private Color placedColor = Color.green;
+        [SerializeField] private ObjectData data;
         private bool isPlaced = false;
 
-        public void Interact(PhotonView playerPhotonView)
+        public void Interact(PhotonView playerPhotonView, GameObject _object)
         {
             if (isPlaced) return;
-
+            if (_object.GetComponent<PickupObject>().GetObjectId() != data.id) return;
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
 

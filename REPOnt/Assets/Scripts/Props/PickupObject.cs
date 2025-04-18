@@ -6,13 +6,13 @@ namespace Props
 {
     public class PickupObject : MonoBehaviourPun
     {
+        [SerializeField] private ObjectData data;
         public void Interact(PhotonView playerPhotonView)
         {
-            if (playerPhotonView != null)
-            {
-                photonView.RPC("RPC_HandlePickup", RpcTarget.AllBuffered, playerPhotonView.ViewID);
-            }
+            if (playerPhotonView != null) photonView.RPC("RPC_HandlePickup", RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
+
+        public int GetObjectId() { return data.id; }
 
         [PunRPC]
         public void RPC_HandlePickup(int playerViewID)
@@ -35,10 +35,7 @@ namespace Props
                 return;
             }
             
-            if (mover.CurrentHandObject != null)
-            {
-                mover.CurrentHandObject.SetActive(false);
-            }
+            if (mover.CurrentHandObject != null) { mover.CurrentHandObject.SetActive(false); }
 
             gameObject.SetActive(false);
             mover.Equip();

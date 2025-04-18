@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PlayerScripts
 {
-    [CreateAssetMenu(fileName = "PlayerData", menuName = "Data")]
+    [CreateAssetMenu(fileName = "Data/PlayerData", menuName = "Data/PlayerData")]
     public class PlayerData : ScriptableObject
     {
         public float NormalSpeed;

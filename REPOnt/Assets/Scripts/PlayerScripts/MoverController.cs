@@ -21,19 +21,13 @@ namespace PlayerScripts
             CurrentHandObject.SetActive(true);
         }
 
-        public void DropHandObject()
-        {
-            CurrentHandObject.SetActive(false);
-        }
+        public void DropHandObject() { CurrentHandObject.SetActive(false); }
 
         protected override void Update()
         {
             base.Update();
 
-            if (Input.GetKeyDown(interactKey))
-            {
-                TryInteract();
-            }
+            if (Input.GetKeyDown(interactKey)) TryInteract();
         }
 
         private void TryInteract()
@@ -52,14 +46,11 @@ namespace PlayerScripts
                 }
                 else if (hit.collider.TryGetComponent(out DropZone dropZone))
                 {
-                    dropZone.Interact(photonView);
+                    dropZone.Interact(photonView, CurrentHandObject);
                     Debug.Log("DropZone Interacted");
                 }
             }
-            else
-            {
-                Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
-            }
+            else Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
         }
     }
 }
