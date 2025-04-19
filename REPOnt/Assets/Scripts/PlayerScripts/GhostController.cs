@@ -54,8 +54,13 @@ namespace PlayerScripts
                 if (hit.collider.TryGetComponent<PhotonView>(out PhotonView targetPV))
                 {
                     Debug.Log($"[GhostInteraction] Hit mover: {targetPV.name}");
+                    
                     targetPV.RPC("TeleportToLocation", targetPV.Owner, teleportTarget.position);
+                    //TODO Podria incluirse ambos RPC en un metodo 'GetCaptured' en el mover y llamar a un 'Capture Mover' en el Ghost para mejor lectura
+                    targetPV.RPC("MarkAsCaptured", RpcTarget.AllBuffered);
+                    
                     interactTimer = 0f;
+                    
                 }
             }
         }
@@ -93,7 +98,7 @@ namespace PlayerScripts
             }
         }
 #endif
-
+        
         private void OnDrawGizmos()
         {
             Vector3 origin = transform.position;

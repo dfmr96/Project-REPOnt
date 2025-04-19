@@ -12,7 +12,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public Action<int> OnRoomJoined;
     public Action<string> OnRoomJoinUpdated;
     [SerializeField] private int sceneToLoad = 1;
-    private const int MinPlayersRequired = 2;
+    [SerializeField] private const int MinPlayersRequired = 3;
 
     private void Awake()
     {
