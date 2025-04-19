@@ -14,6 +14,15 @@ namespace PlayerScripts
 
         public GameObject CurrentHandObject => currentHandObject;
 
+        public bool IsCaptured { get; private set; }
+        
+        protected override void Start()
+        {
+            base.Start();
+            GameManager.Instance.RegisterMover(this);
+        }
+
+
         public void Equip()
         {
             if (CurrentHandObject.activeSelf) return;
@@ -60,6 +69,18 @@ namespace PlayerScripts
             {
                 Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
             }
+        }
+        
+        [PunRPC]
+        public void MarkAsCaptured()
+        {
+            if (IsCaptured) return;
+
+            IsCaptured = true;
+            Debug.Log($"[MoverController] {photonView.Owner.NickName} has been captured.");
+            GameManager.Instance.CheckMoversCaptured();
+
+            // TODO Desactivar Inputs
         }
     }
 }

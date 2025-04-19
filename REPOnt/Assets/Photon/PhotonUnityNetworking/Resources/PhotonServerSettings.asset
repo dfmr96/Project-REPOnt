@@ -42,6 +42,7 @@ MonoBehaviour:
   - TeleportToLocation
   - RPC_HandlePickup
   - RPC_PlaceObject
+  - MarkAsCaptured
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
