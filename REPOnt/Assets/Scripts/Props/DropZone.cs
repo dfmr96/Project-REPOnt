@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
@@ -9,9 +10,16 @@ namespace Props
         [SerializeField] private Color placedColor = Color.green;
         private bool isPlaced = false;
 
+        public bool IsPlaced => isPlaced;
+
+        private void Start()
+        {
+            GameManager.Instance.RegisterDropZone(this);
+        }
+
         public void Interact(PhotonView playerPhotonView)
         {
-            if (isPlaced) return;
+            if (IsPlaced) return;
 
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
@@ -30,6 +38,7 @@ namespace Props
             mover.DropHandObject();
 
             isPlaced = true;
+            GameManager.Instance.CheckDropCompletion();
         }
     }
 }

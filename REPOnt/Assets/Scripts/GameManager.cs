@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using PlayerScripts;
+using Props;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform prisonPoint;
     public Transform PrisonPoint => prisonPoint;
     private readonly List<MoverController> movers = new(); //readonly evita que te pisen la lista de mala leche
-
+    private readonly List<DropZone> dropZones = new();
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -43,7 +44,30 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
-
+    public void RegisterDropZone(DropZone zone)
+    {
+        if (!dropZones.Contains(zone))
+            dropZones.Add(zone);
+    }
+    public void CheckDropCompletion()
+    {
+        if (AreAllDropZonesPlaced())
+        {
+            Debug.Log("All objects have been placed! Movers win!");
+            // TODO: Add Mover victory RPC/event
+        }
+    }
     
+    private bool AreAllDropZonesPlaced()
+    {
+        //TODO Minimo de dropzones para ganar
+        foreach (var zone in dropZones)
+        {
+            if (!zone.IsPlaced)
+                return false;
+        }
+
+        return true;
+    }
     
 }
