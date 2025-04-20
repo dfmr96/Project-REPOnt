@@ -12,7 +12,7 @@ public class PlayerBase : MonoBehaviour
     private float cameraAngle;
     protected virtual void Awake() { photonView = GetComponent<PhotonView>(); }
 
-    private void Start()
+    protected virtual void Start()
     {
         if (!photonView.IsMine)
         {

@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
@@ -7,13 +8,19 @@ namespace Props
     public class DropZone : MonoBehaviourPun
     {
         [SerializeField] private Color placedColor = Color.green;
-        [SerializeField] private ObjectData data;
         private bool isPlaced = false;
 
-        public void Interact(PhotonView playerPhotonView, int objectId)
+        public bool IsPlaced => isPlaced;
+
+        private void Start()
         {
-            if (isPlaced) return;
-            if (objectId != data.id) return;
+            GameManager.Instance.RegisterDropZone(this);
+        }
+
+        public void Interact(PhotonView playerPhotonView)
+        {
+            if (IsPlaced) return;
+
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
 
@@ -31,6 +38,7 @@ namespace Props
             mover.DropHandObject();
 
             isPlaced = true;
+            GameManager.Instance.CheckDropCompletion();
         }
     }
 }
