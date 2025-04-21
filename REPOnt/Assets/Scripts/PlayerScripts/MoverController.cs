@@ -12,6 +12,8 @@ namespace PlayerScripts
 
         [SerializeField] GameObject currentHandObject;
 
+        public int objectId;
+
         public GameObject CurrentHandObject => currentHandObject;
 
         public bool IsCaptured { get; private set; }
@@ -26,23 +28,16 @@ namespace PlayerScripts
         public void Equip()
         {
             if (CurrentHandObject.activeSelf) return;
-        
             CurrentHandObject.SetActive(true);
         }
 
-        public void DropHandObject()
-        {
-            CurrentHandObject.SetActive(false);
-        }
+        public void DropHandObject() { CurrentHandObject.SetActive(false); }
 
         protected override void Update()
         {
             base.Update();
 
-            if (Input.GetKeyDown(interactKey))
-            {
-                TryInteract();
-            }
+            if (Input.GetKeyDown(interactKey)) TryInteract();
         }
 
         private void TryInteract()
@@ -56,19 +51,17 @@ namespace PlayerScripts
 
                 if (hit.collider.TryGetComponent(out PickupObject pickup))
                 {
+                    objectId = pickup.GetObjectId();
                     pickup.Interact(photonView);
                     Debug.Log("PickupObject Interacted");
                 }
                 else if (hit.collider.TryGetComponent(out DropZone dropZone))
                 {
-                    dropZone.Interact(photonView);
+                    dropZone.Interact(photonView, objectId);
                     Debug.Log("DropZone Interacted");
                 }
             }
-            else
-            {
-                Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
-            }
+            else Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
         }
         
         [PunRPC]

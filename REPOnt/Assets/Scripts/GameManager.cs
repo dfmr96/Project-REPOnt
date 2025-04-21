@@ -10,8 +10,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform prisonPoint;
     public Transform PrisonPoint => prisonPoint;
+
+
     private readonly List<MoverController> movers = new(); //readonly evita que te pisen la lista de mala leche
-    private readonly List<DropZone> dropZones = new();
+    [field: SerializeField] private List<DropZone> dropZones;
+    [field: SerializeField] private List<PickupObject> pickupObjects;
+
+    public List<DropZone> DropZones => dropZones;
+
+    public List<PickupObject> PickupObjects => pickupObjects;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -46,8 +54,8 @@ public class GameManager : MonoBehaviour
     }
     public void RegisterDropZone(DropZone zone)
     {
-        if (!dropZones.Contains(zone))
-            dropZones.Add(zone);
+        if (!DropZones.Contains(zone))
+            DropZones.Add(zone);
     }
     public void CheckDropCompletion()
     {
@@ -58,10 +66,16 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    public void RegisterPickupObject(PickupObject pickupObject)
+    {
+        if (!PickupObjects.Contains(pickupObject))
+            PickupObjects.Add(pickupObject);
+    }
+    
     private bool AreAllDropZonesPlaced()
     {
         //TODO Minimo de dropzones para ganar
-        foreach (var zone in dropZones)
+        foreach (var zone in DropZones)
         {
             if (!zone.IsPlaced)
                 return false;

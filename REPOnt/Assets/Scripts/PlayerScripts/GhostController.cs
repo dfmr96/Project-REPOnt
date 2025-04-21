@@ -83,10 +83,7 @@ namespace PlayerScripts
                     rend.material.color = debugHighlightColor;
                 }
             }
-            else
-            {
-                ClearLastDebugHighlight();
-            }
+            else ClearLastDebugHighlight();
         }
 
         private void ClearLastDebugHighlight()

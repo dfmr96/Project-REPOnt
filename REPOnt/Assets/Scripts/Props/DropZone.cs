@@ -8,19 +8,27 @@ namespace Props
     public class DropZone : MonoBehaviourPun
     {
         [SerializeField] private Color placedColor = Color.green;
+        [SerializeField] private PropData propData;
+        [SerializeField] private Renderer rend;
         private bool isPlaced = false;
 
         public bool IsPlaced => isPlaced;
 
         private void Start()
         {
-            GameManager.Instance.RegisterDropZone(this);
+            rend = GetComponent<Renderer>();
+            
+            // The assignment is done in the PropAssignmentManager
+            /*if (propData != null && rend != null)
+            {
+                rend.material.color = propData.DropZoneColor;
+            }*/
         }
 
-        public void Interact(PhotonView playerPhotonView)
+        public void Interact(PhotonView playerPhotonView, int objectId)
         {
-            if (IsPlaced) return;
-
+            if (isPlaced) return;
+            if (objectId != propData.ID) return;
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
 
@@ -39,6 +47,16 @@ namespace Props
 
             isPlaced = true;
             GameManager.Instance.CheckDropCompletion();
+        }
+        
+        public void SetPropData(PropData data)
+        {
+            propData = data;
+
+            if (rend != null && propData != null)
+            {
+                rend.material.color = propData.DropZoneColor;
+            }
         }
     }
 }
