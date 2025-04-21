@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15239018720a79a4aa767fca38cc12f3, type: 3}
+  m_Name: ChairData
+  m_EditorClassIdentifier: 
+  propName: Chair
+  id: 4
+  baseColor: {r: 0.7294118, g: 0.34013557, b: 0.16078429, a: 1}
+  dropZoneColor: {r: 0.7294118, g: 0.34117648, b: 0.16078432, a: 0.4}
