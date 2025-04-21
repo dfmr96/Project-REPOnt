@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15239018720a79a4aa767fca38cc12f3, type: 3}
-  m_Name: OvenData
+  m_Name: TVData
   m_EditorClassIdentifier: 
-  id: 1
+  propName: TV
+  id: 0
+  baseColor: {r: 0.16, g: 0.5, b: 0.73, a: 1}
+  dropZoneColor: {r: 0.16, g: 0.5, b: 0.73, a: 0.4}

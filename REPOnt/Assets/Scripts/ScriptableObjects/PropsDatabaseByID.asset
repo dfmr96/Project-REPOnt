@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e304efd73e7e81489674d698ef19017, type: 3}
+  m_Name: PropsDatabaseByID
+  m_EditorClassIdentifier: 
+  rawList:
+  - {fileID: 11400000, guid: e5448121a44568f4992d57907248b9d8, type: 2}
+  - {fileID: 11400000, guid: 588fb2f40a8cf434caf28b84fe6d8d0e, type: 2}
+  - {fileID: 11400000, guid: a9d59d4484dd8ed4e9118a1dd9fdb7d7, type: 2}
+  propsById:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 11400000, guid: a9d59d4484dd8ed4e9118a1dd9fdb7d7, type: 2}
+    - Key: 1
+      Value: {fileID: 11400000, guid: e5448121a44568f4992d57907248b9d8, type: 2}
+    - Key: 2
+      Value: {fileID: 11400000, guid: 588fb2f40a8cf434caf28b84fe6d8d0e, type: 2}
