@@ -45,6 +45,11 @@ public class PropAssignmentManager : MonoBehaviourPun
             selected.Add(allProps[index]);
             allProps.RemoveAt(index);
         }
+        
+        List<int> dropzonesIndex = new();
+        for (int i = 0; i < dropZones.Count; i++) dropzonesIndex.Add(i);
+        Shuffle(dropzonesIndex);
+        int[] chosenDropZones = dropzonesIndex.GetRange(0, count).ToArray();
 
         int[] dropIDs = new int[count];
         for (int i = 0; i < count; i++)
@@ -61,17 +66,17 @@ public class PropAssignmentManager : MonoBehaviourPun
             pickupIDs[i] = shuffled[i].ID;
         }
         // RPC_ApplyPropAssignment(dropIDs,pickupIDs);
-        photonView.RPC(nameof(RPC_ApplyPropAssignment), RpcTarget.AllBuffered, dropIDs, pickupIDs);
+        photonView.RPC(nameof(RPC_ApplyPropAssignment), RpcTarget.AllBuffered, chosenDropZones, dropIDs, pickupIDs);
     }
     
     [PunRPC]
-    private void RPC_ApplyPropAssignment(int[] dropIDs, int[] pickupIDs)
+    private void RPC_ApplyPropAssignment(int[] chosenDropzones, int[] dropIDs, int[] pickupIDs)
     {
         for (int i = 0; i < dropIDs.Length; i++)
         {
             var data = propsDatabase.GetByID(dropIDs[i]);
             if (data != null)
-                dropZones[i].SetPropData(data);
+                dropZones[chosenDropzones[i]].SetPropData(data);
         }
         
         for (int i = 0; i < pickupIDs.Length; i++)
