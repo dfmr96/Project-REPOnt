@@ -73,9 +73,11 @@ public class GameManager : MonoBehaviour
     
     private bool AreAllDropZonesPlaced()
     {
-        for (int i = 0; i <= PickupObjects.Count - 2; i++) //Este es el checekeo que esta raro, no se si es culpa de las dropzones desactivadas o que, entonces preferi preguntar por la cantidad de objetos
+        for (int i = 0; i <= dropZones.Count; i++) //Este es el checekeo que esta raro, no se si es culpa de las dropzones desactivadas o que, entonces preferi preguntar por la cantidad de objetos
         {
-            if (!DropZones[i].IsPlaced) return false;
+            if (!dropZones[i].isActiveAndEnabled) continue;
+
+            if (!dropZones[i].IsPlaced) { return false;}
         }
         return true;
     }
