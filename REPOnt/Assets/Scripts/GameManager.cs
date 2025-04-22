@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     
     private bool AreAllDropZonesPlaced()
     {
-        for (int i = 0; i <= DropZones.Count - 2; i++)
+        for (int i = 0; i <= PickupObjects.Count - 2; i++)
         {
             if (!DropZones[i].IsPlaced) return false;
         }
