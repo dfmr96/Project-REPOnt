@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -14,5 +15,18 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
-    public void ShowEndResults(bool isMovers) { Instantiate(isMovers ? moversPrefab : ghostPrefab, canvasTransform); }
+    public void ShowEndResults(bool isMovers) 
+    { 
+        Instantiate(isMovers ? moversPrefab : ghostPrefab, canvasTransform);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void BackToMainMenu() { PhotonNetwork.Disconnect(); }
+
+    public void ExitGame() 
+    {
+        PhotonNetwork.Disconnect();
+        Application.Quit();
+    }
 }

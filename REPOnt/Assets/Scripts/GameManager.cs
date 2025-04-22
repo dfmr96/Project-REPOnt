@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using PlayerScripts;
 using Props;
@@ -73,7 +72,7 @@ public class GameManager : MonoBehaviour
     
     private bool AreAllDropZonesPlaced()
     {
-        for (int i = 0; i <= dropZones.Count; i++) //Este es el checekeo que esta raro, no se si es culpa de las dropzones desactivadas o que, entonces preferi preguntar por la cantidad de objetos
+        for (int i = 0; i < dropZones.Count; i++) //Este es el checekeo que esta raro, no se si es culpa de las dropzones desactivadas o que, entonces preferi preguntar por la cantidad de objetos
         {
             if (!dropZones[i].isActiveAndEnabled) continue;
 
@@ -83,16 +82,5 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
-    private void RPC_EndGame(bool isMover) 
-    { 
-        UIManager.Instance.ShowEndResults(isMover);
-        StartCoroutine(Disconnect(timeForDisconnect));
-    }
-
-    private IEnumerator Disconnect(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Photon.Pun.PhotonNetwork.Disconnect();
-    }
-    
+    private void RPC_EndGame(bool isMover) { UIManager.Instance.ShowEndResults(isMover); }
 }

@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 3833385943426822704}
   - component: {fileID: 1375798083768557081}
   - component: {fileID: 4846169341958920445}
+  - component: {fileID: 1764696623725164377}
   m_Layer: 5
   m_Name: GhostVictoryPanel
   m_TagString: Untagged
@@ -238,6 +239,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!114 &1764696623725164377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3202045656119631175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b44bad2788e9c47910ed36631b192b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3329645160640188842
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +371,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1772392909903970100}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1764696623725164377}
+        m_TargetAssemblyTypeName: FinalConditionPanel, Assembly-CSharp
+        m_MethodName: ReturnMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4693807924750029193
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,4 +836,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6120111680060360458}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1764696623725164377}
+        m_TargetAssemblyTypeName: FinalConditionPanel, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
