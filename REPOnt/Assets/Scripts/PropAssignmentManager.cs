@@ -8,10 +8,10 @@ using UnityEngine;
 public class PropAssignmentManager : MonoBehaviourPun
 {
     [Header("Config")]
-    [SerializeField] private int propsToAssign = 3;
     [SerializeField] private PropsDatabase propsDatabase;
-    [SerializeField] private List<DropZone> dropZones;
-    [SerializeField] private List<PickupObject> pickupObjects;
+    private List<DropZone> dropZones;
+    private List<PickupObject> pickupObjects;
+    private int propsToAssign = 0;
     
     private void Start()
     {
@@ -20,6 +20,7 @@ public class PropAssignmentManager : MonoBehaviourPun
         
         if (PhotonNetwork.IsMasterClient)
         {
+            propsToAssign = GameManager.Instance.PropsToWin;
             StartCoroutine(DelayedAssignProps());
         }
     }

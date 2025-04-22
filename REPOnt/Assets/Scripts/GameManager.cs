@@ -8,25 +8,21 @@ using Photon.Pun;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-
+    [SerializeField] private int propsToWin = 3;
+    [SerializeField] private int propsPlaced = 0;
     [SerializeField] private Transform prisonPoint;
-
-    private PhotonView photonView;
-    private float timeForDisconnect = 8f;
-    public Transform PrisonPoint => prisonPoint;
-
-
-    private readonly List<MoverController> movers = new(); //readonly evita que te pisen la lista de mala leche
     [field: SerializeField] private List<DropZone> dropZones;
     [field: SerializeField] private List<PickupObject> pickupObjects;
 
+    private PhotonView photonView;
+    private float timeForDisconnect = 8f;
+    private readonly List<MoverController> movers = new(); //readonly evita que te pisen la lista de mala leche
+
+    public Transform PrisonPoint => prisonPoint;
     public List<DropZone> DropZones => dropZones;
-
     public List<PickupObject> PickupObjects => pickupObjects;
+    public int PropsToWin => propsToWin;
 
-    [SerializeField] private int propsToWin = 3;
-    [SerializeField] private int propsPlaced = 0;
-    
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -36,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UIManager.Instance.UpdatePropProgress(propsPlaced, propsToWin);
+        UIManager.Instance.UpdatePropProgress(propsPlaced, PropsToWin);
     }
 
     public void RegisterMover(MoverController mover)
@@ -75,7 +71,7 @@ public class GameManager : MonoBehaviour
     public void RegisterPropPlaced()
     {
         propsPlaced++;
-        UIManager.Instance.UpdatePropProgress(propsPlaced, propsToWin);
+        UIManager.Instance.UpdatePropProgress(propsPlaced, PropsToWin);
         CheckDropCompletion();
     }
     
@@ -87,7 +83,7 @@ public class GameManager : MonoBehaviour
     
     private bool PropsToWinReached()
     {
-        return propsPlaced >= propsToWin;
+        return propsPlaced >= PropsToWin;
     }
 
     [PunRPC]
