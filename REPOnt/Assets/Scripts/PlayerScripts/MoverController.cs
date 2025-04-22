@@ -11,6 +11,7 @@ namespace PlayerScripts
         [SerializeField] private KeyCode interactKey = KeyCode.E;
 
         [SerializeField] GameObject currentHandObject;
+        private Renderer currentHandObjectRenderer;
 
         public int objectId;
 
@@ -22,6 +23,7 @@ namespace PlayerScripts
         {
             base.Start();
             GameManager.Instance.RegisterMover(this);
+            currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
         }
 
 
@@ -31,7 +33,11 @@ namespace PlayerScripts
             CurrentHandObject.SetActive(true);
         }
 
-        public void DropHandObject() { CurrentHandObject.SetActive(false); }
+        public void DropHandObject()
+        {
+            currentHandObjectRenderer.material.color = Color.cyan;
+            CurrentHandObject.SetActive(false);
+        }
 
         protected override void Update()
         {
@@ -47,6 +53,8 @@ namespace PlayerScripts
             Vector3 origin = transform.position;
             Vector3 direction = transform.forward;
 
+            
+            //TODO Hacer interfaz IInteractable
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactRange))
             {
                 Debug.DrawRay(origin, direction * interactRange, Color.blue, 1f);
@@ -54,6 +62,7 @@ namespace PlayerScripts
                 if (hit.collider.TryGetComponent(out PickupObject pickup))
                 {
                     objectId = pickup.GetObjectId();
+                    currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
                     pickup.Interact(photonView);
                     Debug.Log("PickupObject Interacted");
                 }

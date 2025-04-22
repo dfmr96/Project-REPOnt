@@ -10,6 +10,8 @@ namespace Props
         [SerializeField] private PropData propData;
         [SerializeField] private Renderer rend;
 
+        public PropData PropData => propData;
+
         private void Start()
         {
             rend = GetComponent<Renderer>();
@@ -25,7 +27,7 @@ namespace Props
             if (playerPhotonView != null) photonView.RPC(nameof(RPC_HandlePickup), RpcTarget.AllBuffered, playerPhotonView.ViewID);
         }
 
-        public int GetObjectId() { return propData.ID; }
+        public int GetObjectId() { return PropData.ID; }
 
         [PunRPC]
         public void RPC_HandlePickup(int playerViewID)
@@ -58,9 +60,9 @@ namespace Props
         {
             propData = data;
 
-            if (rend != null && propData != null)
+            if (rend != null && PropData != null)
             {
-                rend.material.color = propData.BaseColor;
+                rend.material.color = PropData.BaseColor;
             }
         }
         //TODO DropZone y PickObject tienen varios metodos en comun. Se podrian unificar en una clase base

@@ -46,7 +46,7 @@ namespace Props
             mover.DropHandObject();
 
             isPlaced = true;
-            GameManager.Instance.CheckDropCompletion();
+            GameManager.Instance.RegisterPropPlaced();
         }
         
         public void SetPropData(PropData data)

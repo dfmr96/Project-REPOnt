@@ -1204,6 +1204,7 @@ MonoBehaviour:
   moversPrefab: {fileID: 2098807260676439643, guid: ddf9082ccd21fe94b9a96d1a2c19bf21, type: 3}
   ghostPrefab: {fileID: 3202045656119631175, guid: 8fb64b550e51fca4fb5f9669ef011573, type: 3}
   canvasTransform: {fileID: 21162880}
+  propProgressText: {fileID: 156332813}
 --- !u!4 &60459760
 Transform:
   m_ObjectHideFlags: 0
@@ -1307,6 +1308,8 @@ MonoBehaviour:
   - {fileID: 1602986873}
   - {fileID: 55843040}
   - {fileID: 0}
+  propsToWin: 3
+  propsPlaced: 0
 --- !u!4 &77982596
 Transform:
   m_ObjectHideFlags: 0
