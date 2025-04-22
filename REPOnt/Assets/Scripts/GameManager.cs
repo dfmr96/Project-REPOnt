@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using PlayerScripts;
 using Props;
 using UnityEngine;
+using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private Transform prisonPoint;
+
+    private PhotonView photonView;
     public Transform PrisonPoint => prisonPoint;
 
 
@@ -24,14 +27,12 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         Instance = this;
+        photonView = GetComponent<PhotonView>();
     }
     
     public void RegisterMover(MoverController mover)
     {
-        if (!movers.Contains(mover))
-        {
-            movers.Add(mover);
-        }
+        if (!movers.Contains(mover)) movers.Add(mover);
     }
 
     public void CheckMoversCaptured()
@@ -39,30 +40,27 @@ public class GameManager : MonoBehaviour
         if (AreAllMoversCaptured())
         {
             Debug.Log("All movers have been captured!");
-            //TODO Agregar lógica para RPC de victoria Ghost
+            photonView.RPC("RPC_EndGame", RpcTarget.All, false);
         }
     }
     private bool AreAllMoversCaptured()
     {
-        foreach (var mover in movers)
+        for (int i = 0; i <= movers.Count - (movers.Count / 2); i++)
         {
-            if (!mover.IsCaptured)
-                return false;
+            if (!movers[i].IsCaptured) return false;
         }
-
         return true;
     }
     public void RegisterDropZone(DropZone zone)
     {
-        if (!DropZones.Contains(zone))
-            DropZones.Add(zone);
+        if (!DropZones.Contains(zone)) DropZones.Add(zone);
     }
     public void CheckDropCompletion()
     {
         if (AreAllDropZonesPlaced())
         {
             Debug.Log("All objects have been placed! Movers win!");
-            // TODO: Add Mover victory RPC/event
+            photonView.RPC("RPC_EndGame", RpcTarget.All, true);
         }
     }
     
@@ -74,14 +72,14 @@ public class GameManager : MonoBehaviour
     
     private bool AreAllDropZonesPlaced()
     {
-        //TODO Minimo de dropzones para ganar
-        foreach (var zone in DropZones)
+        for (int i = 0; i <= DropZones.Count - 2; i++)
         {
-            if (!zone.IsPlaced)
-                return false;
+            if (!DropZones[i].IsPlaced) return false;
         }
-
         return true;
     }
+
+    [PunRPC]
+    private void RPC_EndGame(bool isMover) { UIManager.Instance.ShowEndResults(isMover); }
     
 }

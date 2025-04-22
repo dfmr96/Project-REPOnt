@@ -1,4 +1,3 @@
-using System;
 using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
@@ -39,7 +38,7 @@ public class PlayerBase : MonoBehaviour
 
     protected virtual void Look()
     {
-        //5f va a ser por ahora la sensibilidad pero esto deberia cambiar para cada jugador
+        //100f va a ser por ahora la sensibilidad pero esto deberia cambiar para cada jugador
         rotation.x = Input.GetAxis("Mouse X") * Time.deltaTime * 100f;
         rotation.y = Input.GetAxis("Mouse Y") * Time.deltaTime * 100f;
 
