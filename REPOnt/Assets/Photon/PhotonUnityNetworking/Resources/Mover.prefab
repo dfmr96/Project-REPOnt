@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 3350648802145381551}
   - component: {fileID: -307759398742583435}
   - component: {fileID: -101943958894553214}
+  - component: {fileID: -3445888592055323644}
   m_Layer: 0
   m_Name: Mover
   m_TagString: Mover
@@ -390,6 +391,32 @@ MonoBehaviour:
   interactKey: 101
   currentHandObject: {fileID: 5908596995860277552}
   objectId: 0
+--- !u!143 &-3445888592055323644
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5479790456120119676}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5908596995860277552
 GameObject:
   m_ObjectHideFlags: 0
