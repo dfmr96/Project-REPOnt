@@ -10,12 +10,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     [SerializeField] private int propsToWin = 3;
     [SerializeField] private int propsPlaced = 0;
+    [SerializeField] private float matchDurationSeconds = 120;
     [SerializeField] private Transform prisonPoint;
     [field: SerializeField] private List<DropZone> dropZones;
     [field: SerializeField] private List<PickupObject> pickupObjects;
 
     private PhotonView photonView;
-    private float timeForDisconnect = 8f;
+    private double matchStartTime;
+    private int capturedMovers = 0;
     private readonly List<MoverController> movers = new(); //readonly evita que te pisen la lista de mala leche
 
     public Transform PrisonPoint => prisonPoint;
@@ -32,7 +34,21 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (PhotonNetwork.IsMasterClient) 
+            photonView.RPC("RPC_SetMatchStartTime", RpcTarget.All, PhotonNetwork.Time);
         UIManager.Instance.UpdatePropProgress(propsPlaced, PropsToWin);
+    }
+
+    private void Update()
+    {
+        if (matchStartTime == 0) return;
+
+        float timeRemaining = Mathf.Max(0f, matchDurationSeconds - (float)(PhotonNetwork.Time - matchStartTime));
+
+        UIManager.Instance.UpdateTimer(timeRemaining);
+
+        if (PhotonNetwork.IsMasterClient && timeRemaining <= 0f) 
+            photonView.RPC("RPC_EndGame", RpcTarget.All, false);
     }
 
     public void RegisterMover(MoverController mover)
@@ -42,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckMoversCaptured()
     {
+        photonView.RPC("RPC_UpdateCapturedPlayers", RpcTarget.All);
         if (AreAllMoversCaptured())
         {
             Debug.Log("All movers have been captured!");
@@ -81,11 +98,14 @@ public class GameManager : MonoBehaviour
             PickupObjects.Add(pickupObject);
     }
     
-    private bool PropsToWinReached()
-    {
-        return propsPlaced >= PropsToWin;
-    }
+    private bool PropsToWinReached() { return propsPlaced >= PropsToWin; }
 
     [PunRPC]
     private void RPC_EndGame(bool isMover) { UIManager.Instance.ShowEndResults(isMover); }
+    private void RPC_SetMatchStartTime(double startTime) { matchStartTime = startTime; }
+    private void RPC_UpdateCapturedPlayers() 
+    {
+        capturedMovers += 1;
+        UIManager.Instance.UpdateCapturedMovers(PhotonNetwork.PlayerList.Length, capturedMovers);
+    }
 }

@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ghostPrefab;
     [SerializeField] private Transform canvasTransform;
     [SerializeField] private TMP_Text propProgressText;
+    [SerializeField] private TMP_Text moversCapturedText;
+    [SerializeField] private TMP_Text timerText;
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -32,8 +34,13 @@ public class UIManager : MonoBehaviour
         Application.Quit();
     }
     
-    public void UpdatePropProgress(int placed, int total)
+    public void UpdatePropProgress(int placed, int total) { propProgressText.text += "\n" + $"{placed} / {total}"; }
+
+    public void UpdateCapturedMovers(int actualMovers, int totalMovers) { moversCapturedText.text += "\n" + $"{actualMovers} / {totalMovers}"; }
+
+    public void UpdateTimer(float timer)
     {
-        propProgressText.text = $"{placed} / {total}";
+        if (timer <= 30) timerText.color = Color.red;
+        timerText.text += "\n" + timer;
     }
 }
