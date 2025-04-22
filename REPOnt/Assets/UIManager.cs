@@ -15,6 +15,4 @@ public class UIManager : MonoBehaviour
     }
 
     public void ShowEndResults(bool isMovers) { Instantiate(isMovers ? moversPrefab : ghostPrefab, canvasTransform); }
-
-
 }
