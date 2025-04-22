@@ -51,15 +51,7 @@ public class PropAssignmentManager : MonoBehaviourPun
         Shuffle(dropzonesIndex);
         int[] chosenDropZones = dropzonesIndex.GetRange(0, count).ToArray();
 
-        HashSet<int> chosenSet = new(chosenDropZones);
-
-        for (int i = 0; i < dropZones.Count; i++)
-        {
-            if (!chosenSet.Contains(i))
-            {
-                dropZones[i].gameObject.SetActive(false);
-            }
-        }
+        
 
         int[] dropIDs = new int[count];
         for (int i = 0; i < count; i++)
@@ -82,6 +74,16 @@ public class PropAssignmentManager : MonoBehaviourPun
     [PunRPC]
     private void RPC_ApplyPropAssignment(int[] chosenDropzones, int[] dropIDs, int[] pickupIDs)
     {
+        HashSet<int> chosenSet = new(chosenDropzones);
+
+        for (int i = 0; i < dropZones.Count; i++)
+        {
+            if (!chosenSet.Contains(i))
+            {
+                dropZones[i].gameObject.SetActive(false);
+            }
+        }
+        
         for (int i = 0; i < dropIDs.Length; i++)
         {
             var data = propsDatabase.GetByID(dropIDs[i]);
