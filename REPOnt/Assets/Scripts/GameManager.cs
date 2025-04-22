@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform prisonPoint;
 
     private PhotonView photonView;
+    private float timeForDisconnect = 8f;
     public Transform PrisonPoint => prisonPoint;
 
 
@@ -80,6 +81,16 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
-    private void RPC_EndGame(bool isMover) { UIManager.Instance.ShowEndResults(isMover); }
+    private void RPC_EndGame(bool isMover) 
+    { 
+        UIManager.Instance.ShowEndResults(isMover);
+        StartCoroutine(Disconnect(timeForDisconnect));
+    }
+
+    private IEnumerator Disconnect(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Photon.Pun.PhotonNetwork.Disconnect();
+    }
     
 }
