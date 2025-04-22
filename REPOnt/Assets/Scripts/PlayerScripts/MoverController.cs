@@ -35,8 +35,10 @@ namespace PlayerScripts
 
         protected override void Update()
         {
+            if (!photonView.IsMine) return;
+            
             base.Update();
-
+            
             if (Input.GetKeyDown(interactKey)) TryInteract();
         }
 

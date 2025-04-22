@@ -23,7 +23,7 @@ public class PlayerBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!photonView.IsMine) return;
+        //if (!photonView.IsMine) return;
         Move();
         Look();
     }
