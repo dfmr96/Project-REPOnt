@@ -34,13 +34,13 @@ public class UIManager : MonoBehaviour
         Application.Quit();
     }
     
-    public void UpdatePropProgress(int placed, int total) { propProgressText.text += "\n" + $"{placed} / {total}"; }
+    public void UpdatePropProgress(int placed, int total) { propProgressText.text = "Objects remaining\n" + $"{placed} / {total}"; }
 
-    public void UpdateCapturedMovers(int actualMovers, int totalMovers) { moversCapturedText.text += "\n" + $"{actualMovers} / {totalMovers}"; }
+    public void UpdateCapturedMovers(int actualMovers, int totalMovers) { moversCapturedText.text = "Movers captured\n" + $"{actualMovers} / {totalMovers}"; }
 
     public void UpdateTimer(float timer)
     {
-        if (timer <= 30) timerText.color = Color.red;
-        timerText.text += "\n" + timer;
+        if (timer <= 30f) timerText.color = Color.red;
+        timerText.text = "Remaining Time\n" + timer;
     }
 }

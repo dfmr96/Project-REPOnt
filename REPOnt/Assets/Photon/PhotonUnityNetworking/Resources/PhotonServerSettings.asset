@@ -45,6 +45,8 @@ MonoBehaviour:
   - MarkAsCaptured
   - RPC_ApplyPropAssignment
   - RPC_EndGame
+  - RPC_SetMatchStartTime
+  - RPC_UpdateCapturedPlayers
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

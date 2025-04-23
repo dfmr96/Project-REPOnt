@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] private List<PickupObject> pickupObjects;
 
     private PhotonView photonView;
-    private double matchStartTime;
+    private float matchStartTime;
     private int capturedMovers = 0;
     private readonly List<MoverController> movers = new(); //readonly evita que te pisen la lista de mala leche
 
@@ -35,7 +35,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         if (PhotonNetwork.IsMasterClient) 
-            photonView.RPC("RPC_SetMatchStartTime", RpcTarget.All, PhotonNetwork.Time);
+            photonView.RPC("RPC_SetMatchStartTime", RpcTarget.All, (float)PhotonNetwork.Time);
+        photonView.RPC("RPC_UpdateCapturedPlayers", RpcTarget.All);
         UIManager.Instance.UpdatePropProgress(propsPlaced, PropsToWin);
     }
 
@@ -47,13 +48,22 @@ public class GameManager : MonoBehaviour
 
         UIManager.Instance.UpdateTimer(timeRemaining);
 
-        if (PhotonNetwork.IsMasterClient && timeRemaining <= 0f) 
+        if (PhotonNetwork.IsMasterClient && timeRemaining <= 0f)
             photonView.RPC("RPC_EndGame", RpcTarget.All, false);
     }
 
     public void RegisterMover(MoverController mover)
     {
         if (!movers.Contains(mover)) movers.Add(mover);
+    }
+
+    public void RegisterCapturedMover()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        capturedMovers++;
+        photonView.RPC("RPC_UpdateCapturedPlayers", RpcTarget.All);
+        CheckMoversCaptured();
     }
 
     public void CheckMoversCaptured()
@@ -102,10 +112,8 @@ public class GameManager : MonoBehaviour
 
     [PunRPC]
     private void RPC_EndGame(bool isMover) { UIManager.Instance.ShowEndResults(isMover); }
-    private void RPC_SetMatchStartTime(double startTime) { matchStartTime = startTime; }
-    private void RPC_UpdateCapturedPlayers() 
-    {
-        capturedMovers += 1;
-        UIManager.Instance.UpdateCapturedMovers(PhotonNetwork.PlayerList.Length, capturedMovers);
-    }
+    [PunRPC]
+    private void RPC_SetMatchStartTime(float startTime) { matchStartTime = startTime; }
+    [PunRPC]
+    private void RPC_UpdateCapturedPlayers() { UIManager.Instance.UpdateCapturedMovers(capturedMovers, PhotonNetwork.PlayerList.Length - 1); }
 }

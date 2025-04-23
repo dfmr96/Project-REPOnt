@@ -82,7 +82,7 @@ namespace PlayerScripts
 
             IsCaptured = true;
             Debug.Log($"[MoverController] {photonView.Owner.NickName} has been captured.");
-            GameManager.Instance.CheckMoversCaptured();
+            GameManager.Instance.RegisterCapturedMover();
 
             // TODO Desactivar Inputs
         }
