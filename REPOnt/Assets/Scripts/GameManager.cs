@@ -59,16 +59,14 @@ public class GameManager : MonoBehaviour
 
     public void RegisterCapturedMover()
     {
-        if (!PhotonNetwork.IsMasterClient) return;
-
         capturedMovers++;
-        photonView.RPC("RPC_UpdateCapturedPlayers", RpcTarget.All);
+        photonView.RPC(nameof(RPC_UpdateCapturedPlayers), RpcTarget.All);
+        if (!PhotonNetwork.IsMasterClient) return;
         CheckMoversCaptured();
     }
 
     public void CheckMoversCaptured()
     {
-        photonView.RPC("RPC_UpdateCapturedPlayers", RpcTarget.All);
         if (AreAllMoversCaptured())
         {
             Debug.Log("All movers have been captured!");
