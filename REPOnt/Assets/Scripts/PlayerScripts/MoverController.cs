@@ -61,6 +61,7 @@ namespace PlayerScripts
 
                 if (hit.collider.TryGetComponent(out PickupObject pickup))
                 {
+                    if (currentHandObject.activeInHierarchy) return;
                     objectId = pickup.GetObjectId();
                     currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
                     pickup.Interact(photonView);
