@@ -7,16 +7,17 @@ using System;
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     public static ConnectionManager Instance { get; private set; }
-    public Action OnConnectToMaster;
-    public Action OnRoomCreated;
-    public Action<int> OnRoomJoined;
-    public Action<string> OnRoomJoinUpdated;
     [SerializeField] private int sceneToLoad = 1;
     [SerializeField] private int minPlayersRequired = 3;
     private const string RoleKey = "Role";
     private const string GhostRole = "Ghost";
     private const string MoverRole = "Mover";
     
+    public Action OnConnectToMaster;
+    public Action OnRoomCreated;
+    public Action<int> OnRoomJoined;
+    public Action<string> OnRoomJoinUpdated;
+    public Action OnHostLeftRoom;
     // ──────────────────────────────────────────────────────────────────────────────
     // Unity Methods
     // ──────────────────────────────────────────────────────────────────────────────
@@ -64,8 +65,12 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             //Setear los roles es asincrono y entra en race condition usando directamente LoadLevel
         }*/
     }
-    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
-    
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
+    }
+
     // ──────────────────────────────────────────────────────────────────────────────
     // Public API
     // ──────────────────────────────────────────────────────────────────────────────
@@ -162,6 +167,26 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(0.5f);
 
         PhotonNetwork.LoadLevel(sceneToLoad);
+    }
+    
+    public void LeaveRoomAsHost()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC(nameof(RPC_ForceClientsToLeave), RpcTarget.Others);
+        }
+
+        PhotonNetwork.LeaveRoom();
+    }
+    
+    [PunRPC]
+    public void RPC_ForceClientsToLeave()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogWarning("[ConnectionManager] Host has left the room. Disconnecting...");
+            OnHostLeftRoom?.Invoke();
+        }
     }
     
 }

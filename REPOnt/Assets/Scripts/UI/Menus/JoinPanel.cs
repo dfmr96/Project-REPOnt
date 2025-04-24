@@ -24,6 +24,8 @@ public class JoinPanel : MonoBehaviour
     {
         ConnectionManager.Instance.OnRoomJoinUpdated += HandleJoinStatus;
         ConnectionManager.Instance.OnRoomJoined += UpdatePlayerCount;
+        ConnectionManager.Instance.OnHostLeftRoom += HandleHostLeftRoom;
+
         
         ResetUI();
         leaveRoomButton.interactable = PhotonNetwork.InRoom;
@@ -80,6 +82,7 @@ public class JoinPanel : MonoBehaviour
     { 
         ConnectionManager.Instance.OnRoomJoinUpdated -= HandleJoinStatus;
         ConnectionManager.Instance.OnRoomJoined -= UpdatePlayerCount;
+        ConnectionManager.Instance.OnHostLeftRoom -= HandleHostLeftRoom;
     }
     
     private bool IsValidRoomCode(string code, out string errorMessage)
@@ -130,9 +133,7 @@ public class JoinPanel : MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        if (joinPanel != null)
-            joinPanel.SetActive(false);
-        
+        joinPanel.SetActive(false);
         leaveRoomButton.interactable = false;
         rootPanel.SetActive(true);
     }
@@ -148,5 +149,20 @@ public class JoinPanel : MonoBehaviour
 
         joinButton.interactable = true;
         leaveRoomButton.interactable = false;
+    }
+    
+    private void HandleHostLeftRoom()
+    {
+        ShowError("Host left the room. You've been disconnected.");
+        DisconnectAndHide();
+    }
+    
+    public void DisconnectAndHide()
+    {
+        if (PhotonNetwork.InRoom) PhotonNetwork.LeaveRoom();
+        joinPanel.SetActive(false); 
+        rootPanel.SetActive(true);
+
+        ResetUI();
     }
 }

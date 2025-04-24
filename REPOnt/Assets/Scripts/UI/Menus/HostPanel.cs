@@ -12,6 +12,7 @@ public class HostPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playersText;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private Button startGameButton;
+    [SerializeField] private GameObject mainMenuPanel;
     
     private const int RequiredPlayers = 3;
 
@@ -22,6 +23,7 @@ public class HostPanel : MonoBehaviour
         DisplayRoomId();
         UpdateUI(PhotonNetwork.CurrentRoom.PlayerCount);
     }
+
     private void OnDisable()
     {
         ConnectionManager.Instance.OnRoomJoined -= HandlePlayerCount;
@@ -67,5 +69,13 @@ public class HostPanel : MonoBehaviour
     public void OnClickStartGame()
     {
         ConnectionManager.Instance.StartGame();
+    }
+    
+    public void DisconnectAndHide()
+    {
+        ConnectionManager.Instance.LeaveRoomAsHost();
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(true);
+        gameObject.SetActive(false);
     }
 }
