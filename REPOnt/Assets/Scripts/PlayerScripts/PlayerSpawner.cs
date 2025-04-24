@@ -28,7 +28,7 @@ namespace PlayerScripts
 
         void SpawnLocalPlayer()
         {
-            if (!PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Role", out object roleObj))
+            if (!PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(RoleKey, out object roleObj))
             {
                 Debug.LogWarning("No role found for player.");
                 return;
