@@ -6,41 +6,105 @@ using UnityEngine.UI;
 
 public class JoinPanel : MonoBehaviour
 {
+    [Header("UI References")]
     [SerializeField] private TMP_InputField input;
     [SerializeField] private TextMeshProUGUI playersText;
-    [SerializeField] private Button button;
+    [SerializeField] private TextMeshProUGUI errorText;
+    [SerializeField] private Button joinButton;
     private void OnEnable()
     {
-        ConnectionManager.Instance.OnRoomJoinUpdated += CheckStatus;
-        ConnectionManager.Instance.OnRoomJoined += GetPlayers;
+        ConnectionManager.Instance.OnRoomJoinUpdated += HandleJoinStatus;
+        ConnectionManager.Instance.OnRoomJoined += UpdatePlayerCount;
     }
     public void OnInputEnd() 
     {
-        if (string.IsNullOrEmpty(input.text))
+        string roomCode = input.text.Trim();
+
+        if (!IsValidRoomCode(roomCode, out string errorMessage))
         {
-            input.text = "El codigo de la sala esta vacio";
+            ShowError(errorMessage);
             return;
         }
-        if (input.text.Length != 6)
-        {
-            input.text = "El codigo de la sala debe tener 6 caracteres";
-            return;
-        }
-        ConnectionManager.Instance.JoinRoom(input.text);
-        input.interactable = false;
-        button.interactable = false;
+
+        ClearError();
+        ConnectionManager.Instance.JoinRoom(roomCode);
     }
-    private void CheckStatus(string status)
+    private void HandleJoinStatus(string status)
     {
-        if (!string.IsNullOrEmpty(status)) Debug.LogWarning(status);
-        input.text = status;
+        if (!string.IsNullOrEmpty(status))
+        {
+            if (status == "Joined")
+            {
+                input.interactable = false;
+                joinButton.interactable = false;
+                ShowSuccess("Conectado con éxito!");
+            }
+            else
+            {
+                Debug.LogWarning(status);
+                ShowError(status);
+                input.interactable = true;
+                joinButton.interactable = true;
+            }
+        }
     }
 
-    private void GetPlayers(int quantity) { playersText.text = quantity + "/6"; }
+    private void UpdatePlayerCount(int quantity)
+    {
+        if (playersText != null)
+        {
+            playersText.text = $"Players: {quantity} / 6";
+        }
+    }
 
     private void OnDisable() 
     { 
-        ConnectionManager.Instance.OnRoomJoinUpdated -= CheckStatus;
-        ConnectionManager.Instance.OnRoomJoined -= GetPlayers;
+        ConnectionManager.Instance.OnRoomJoinUpdated -= HandleJoinStatus;
+        ConnectionManager.Instance.OnRoomJoined -= UpdatePlayerCount;
+    }
+    
+    private bool IsValidRoomCode(string code, out string errorMessage)
+    {
+        if (string.IsNullOrEmpty(code))
+        {
+            errorMessage = "El código de la sala está vacío.";
+            return false;
+        }
+
+        if (code.Length != 6)
+        {
+            errorMessage = "El código debe tener 6 caracteres.";
+            return false;
+        }
+
+        errorMessage = null;
+        return true;
+    }
+    
+    private void ShowError(string message)
+    {
+        if (errorText != null)
+        {
+            errorText.text = message;
+            errorText.color = Color.red;
+            input.Select();
+        }
+    }
+    
+    private void ShowSuccess(string message)
+    {
+        if (errorText != null)
+        {
+            errorText.text = message;
+            errorText.color = Color.green;
+        }
+    }
+    
+    private void ClearError()
+    {
+        if (errorText != null)
+        {
+            errorText.text = string.Empty;
+        }
     }
 }
