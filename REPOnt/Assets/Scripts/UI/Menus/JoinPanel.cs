@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -11,7 +12,11 @@ public class JoinPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playersText;
     [SerializeField] private TextMeshProUGUI errorText;
     [SerializeField] private Button joinButton;
-    [SerializeField] private TMP_Text buttonText;
+    [SerializeField] private GameObject joinPanel;
+    [SerializeField] private TMP_Text joinText;
+    [SerializeField] private Button leaveRoomButton;
+    [SerializeField] private GameObject rootPanel;
+
     
     private const string JoiningLabel = "Joining...";
     private const string JoinLabel = "Join";
@@ -19,6 +24,9 @@ public class JoinPanel : MonoBehaviour
     {
         ConnectionManager.Instance.OnRoomJoinUpdated += HandleJoinStatus;
         ConnectionManager.Instance.OnRoomJoined += UpdatePlayerCount;
+        
+        ResetUI();
+        leaveRoomButton.interactable = PhotonNetwork.InRoom;
     }
     public void OnInputEnd() 
     {
@@ -31,7 +39,7 @@ public class JoinPanel : MonoBehaviour
         }
 
         ClearError();
-        buttonText.text = JoiningLabel;
+        joinText.text = JoiningLabel;
         ConnectionManager.Instance.JoinRoom(roomCode);
     }
     private void HandleJoinStatus(string status)
@@ -42,8 +50,10 @@ public class JoinPanel : MonoBehaviour
             {
                 input.interactable = false;
                 joinButton.interactable = false;
-                buttonText.text = JoinLabel;
+                joinText.text = JoinLabel;
                 ShowSuccess("Connection Successful!");
+                
+                leaveRoomButton.interactable = true;
             }
             else
             {
@@ -51,7 +61,9 @@ public class JoinPanel : MonoBehaviour
                 ShowError(status);
                 input.interactable = true;
                 joinButton.interactable = true;
-                buttonText.text = JoinLabel;
+                joinText.text = JoinLabel;
+                
+                leaveRoomButton.interactable = false;
             }
         }
     }
@@ -113,5 +125,28 @@ public class JoinPanel : MonoBehaviour
         {
             errorText.text = string.Empty;
         }
+    }
+    
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        if (joinPanel != null)
+            joinPanel.SetActive(false);
+        
+        leaveRoomButton.interactable = false;
+        rootPanel.SetActive(true);
+    }
+    private void ResetUI()
+    {
+        input.text = "";
+        input.interactable = true;
+
+        playersText.text = "Players: 0 / 6";
+    
+        ClearError();
+        joinText.text = JoinLabel;
+
+        joinButton.interactable = true;
+        leaveRoomButton.interactable = false;
     }
 }
