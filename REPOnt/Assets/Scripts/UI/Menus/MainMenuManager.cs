@@ -8,7 +8,11 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject hostPanel;
     [SerializeField] private GameObject joinPanel;
-
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     public void CreateRoom()
     {
         ConnectionManager.Instance.CreateRoom(); 

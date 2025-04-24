@@ -1,3 +1,4 @@
+using Interfaces;
 using Photon.Pun;
 using Props;
 using UnityEngine;
@@ -8,41 +9,30 @@ namespace PlayerScripts
     {
         [Header("Interaction")]
         [SerializeField] private float interactRange = 3f;
-        [SerializeField] private KeyCode interactKey = KeyCode.E;
-
         [SerializeField] GameObject currentHandObject;
-
-        public int objectId;
-
+        
+        
+        private Renderer currentHandObjectRenderer;
         public GameObject CurrentHandObject => currentHandObject;
-
         public bool IsCaptured { get; private set; }
+        public int ObjectId { get; set; }
+
+
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Unity Methods
+        // ──────────────────────────────────────────────────────────────────────────────
         
         protected override void Start()
         {
             base.Start();
             GameManager.Instance.RegisterMover(this);
+            currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
         }
-
-
-        public void Equip()
-        {
-            if (CurrentHandObject.activeSelf) return;
-            CurrentHandObject.SetActive(true);
-        }
-
-        public void DropHandObject() { CurrentHandObject.SetActive(false); }
-
-        protected override void Update()
-        {
-            if (!photonView.IsMine) return;
-            
-            base.Update();
-            
-            if (Input.GetKeyDown(interactKey)) TryInteract();
-        }
-
-        private void TryInteract()
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Interaction Logic
+        // ──────────────────────────────────────────────────────────────────────────────
+        protected override void Interact()
         {
             Vector3 origin = transform.position;
             Vector3 direction = transform.forward;
@@ -51,21 +41,47 @@ namespace PlayerScripts
             {
                 Debug.DrawRay(origin, direction * interactRange, Color.blue, 1f);
 
-                if (hit.collider.TryGetComponent(out PickupObject pickup))
+                if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
-                    objectId = pickup.GetObjectId();
-                    pickup.Interact(photonView);
-                    Debug.Log("PickupObject Interacted");
-                }
-                else if (hit.collider.TryGetComponent(out DropZone dropZone))
-                {
-                    dropZone.Interact(photonView, objectId);
-                    Debug.Log("DropZone Interacted");
+                    interactable.Interact(photonView, ObjectId);
                 }
             }
-            else Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
+            else
+            {
+                Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
+            }
         }
         
+        public void PickupObject(PickupObject pickup)
+        {
+            ObjectId = pickup.PropID;
+            if (CurrentHandObject != null)
+            {
+                CurrentHandObject.SetActive(true);
+                currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
+            }
+
+            Debug.Log($"[Mover] Picked up object with ID {ObjectId}");
+        }
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // State Management
+        // ──────────────────────────────────────────────────────────────────────────────
+        public void Equip()
+        {
+            if (CurrentHandObject.activeSelf) return;
+            CurrentHandObject.SetActive(true);
+        }
+        
+        public void DropHandObject()
+        {
+            currentHandObjectRenderer.material.color = Color.cyan;
+            CurrentHandObject.SetActive(false);
+        }
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // RPC
+        // ──────────────────────────────────────────────────────────────────────────────
         [PunRPC]
         public void MarkAsCaptured()
         {
@@ -73,7 +89,7 @@ namespace PlayerScripts
 
             IsCaptured = true;
             Debug.Log($"[MoverController] {photonView.Owner.NickName} has been captured.");
-            GameManager.Instance.CheckMoversCaptured();
+            GameManager.Instance.RegisterCapturedMover();
 
             // TODO Desactivar Inputs
         }
