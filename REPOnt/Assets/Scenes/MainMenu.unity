@@ -381,12 +381,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1980403653}
-  - {fileID: 519022762}
   m_Father: {fileID: 464518085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059.126, y: -385.4901}
+  m_AnchoredPosition: {x: 1059.126, y: -469.78348}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &137861879
@@ -817,7 +816,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059.126, y: -442.68616}
+  m_AnchoredPosition: {x: 1059.126, y: -656.6102}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &325174830
@@ -952,7 +951,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 1059.126, y: 0}
-  m_SizeDelta: {x: 2118.252, y: 260.13608}
+  m_SizeDelta: {x: 2118.252, y: 270.3534}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &357978712
 MonoBehaviour:
@@ -1083,13 +1082,14 @@ RectTransform:
   - {fileID: 1524291050}
   - {fileID: 2091861271}
   - {fileID: 137861878}
+  - {fileID: 519022762}
   - {fileID: 325174829}
   m_Father: {fileID: 931171224}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059.126, y: -619.5282}
-  m_SizeDelta: {x: 2118.252, y: 718.7843}
+  m_AnchoredPosition: {x: 1059.126, y: -745.13684}
+  m_SizeDelta: {x: 2118.252, y: 949.56696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &464518086
 MonoBehaviour:
@@ -1276,18 +1276,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519022761}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 841781510}
-  m_Father: {fileID: 137861878}
+  m_Father: {fileID: 464518085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 830, y: -30}
-  m_SizeDelta: {x: 60, y: 60}
+  m_AnchoredPosition: {x: 1059.126, y: -565.6969}
+  m_SizeDelta: {x: 176.666, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &519022763
 MonoBehaviour:
@@ -1708,7 +1708,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '>'
+  m_text: Join
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1735,10 +1735,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 53.7
+  m_fontSize: 24
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -1842,7 +1842,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 0
+    m_Bottom: -241
   m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -1906,6 +1906,7 @@ MonoBehaviour:
   playersText: {fileID: 1524291051}
   errorText: {fileID: 325174830}
   joinButton: {fileID: 519022763}
+  buttonText: {fileID: 841781511}
 --- !u!1 &997268917
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,7 +3158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059.126, y: -276.09802}
+  m_AnchoredPosition: {x: 1059.126, y: -292.9567}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1524291051
@@ -3717,14 +3718,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 4
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 1
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 4
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -3839,7 +3840,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059.126, y: -328.29407}
+  m_AnchoredPosition: {x: 1059.126, y: -378.8701}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2091861272

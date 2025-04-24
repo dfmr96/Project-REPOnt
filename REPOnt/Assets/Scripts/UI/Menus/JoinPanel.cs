@@ -11,6 +11,10 @@ public class JoinPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playersText;
     [SerializeField] private TextMeshProUGUI errorText;
     [SerializeField] private Button joinButton;
+    [SerializeField] private TMP_Text buttonText;
+    
+    private const string JoiningLabel = "Joining...";
+    private const string JoinLabel = "Join";
     private void OnEnable()
     {
         ConnectionManager.Instance.OnRoomJoinUpdated += HandleJoinStatus;
@@ -27,6 +31,7 @@ public class JoinPanel : MonoBehaviour
         }
 
         ClearError();
+        buttonText.text = JoiningLabel;
         ConnectionManager.Instance.JoinRoom(roomCode);
     }
     private void HandleJoinStatus(string status)
@@ -37,7 +42,8 @@ public class JoinPanel : MonoBehaviour
             {
                 input.interactable = false;
                 joinButton.interactable = false;
-                ShowSuccess("Conectado con éxito!");
+                buttonText.text = JoinLabel;
+                ShowSuccess("Connection Successful!");
             }
             else
             {
@@ -45,6 +51,7 @@ public class JoinPanel : MonoBehaviour
                 ShowError(status);
                 input.interactable = true;
                 joinButton.interactable = true;
+                buttonText.text = JoinLabel;
             }
         }
     }
@@ -67,13 +74,13 @@ public class JoinPanel : MonoBehaviour
     {
         if (string.IsNullOrEmpty(code))
         {
-            errorMessage = "El código de la sala está vacío.";
+            errorMessage = "Room code must not be empty.";
             return false;
         }
 
         if (code.Length != 6)
         {
-            errorMessage = "El código debe tener 6 caracteres.";
+            errorMessage = "Room code must be 6 characters long.";
             return false;
         }
 
