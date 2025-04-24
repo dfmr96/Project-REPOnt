@@ -86,7 +86,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsConnected) return;
         PhotonNetwork.JoinRoom(roomId);
     }
-    public string GetRunId() {  return PhotonNetwork.CurrentRoom.Name; }
+    public string GetRoomId() {  return PhotonNetwork.CurrentRoom.Name; }
     public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
 
     public bool CanStartGame() => PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersRequired;
