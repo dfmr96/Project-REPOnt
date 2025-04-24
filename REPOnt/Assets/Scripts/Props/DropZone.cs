@@ -11,53 +11,42 @@ namespace Props
         [SerializeField] private Color placedColor = Color.green;
         [SerializeField] private PropData propData;
         [SerializeField] private Renderer rend;
+        
         private bool isPlaced = false;
-
         public bool IsPlaced => isPlaced;
-
+        
         private void Start()
         {
-            rend = GetComponent<Renderer>();
-            
-            // The assignment is done in the PropAssignmentManager
-            /*if (propData != null && rend != null)
-            {
-                rend.material.color = propData.DropZoneColor;
-            }*/
+            if (rend == null)
+                rend = GetComponent<Renderer>();
         }
 
         public void Interact(PhotonView playerPhotonView, int objectId)
         {
-            if (isPlaced) return;
-            if (objectId != propData.ID) return;
+            if (isPlaced || objectId != propData.ID) return;
+
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
+        }
+        public void SetPropData(PropData data)
+        {
+            propData = data;
+            isPlaced = false;
+
+            if (rend != null && data != null)
+                rend.material.color = data.DropZoneColor;
         }
 
         [PunRPC]
         private void RPC_PlaceObject(int playerViewID)
         {
-            GameObject player = PhotonView.Find(playerViewID).gameObject;
-            MoverController mover = player.GetComponent<MoverController>();
+            MoverController mover = GameManager.Instance.GetMoverByViewID(playerViewID);
             if (mover == null) return;
 
-            // Cambia color del cubo
-            GetComponent<Renderer>().material.color = placedColor;
-
-            // Elimina el objeto de la mano
             mover.DropHandObject();
-
             isPlaced = true;
+            rend.material.color = placedColor;
             GameManager.Instance.RegisterPropPlaced();
         }
         
-        public void SetPropData(PropData data)
-        {
-            propData = data;
-
-            if (rend != null && propData != null)
-            {
-                rend.material.color = propData.DropZoneColor;
-            }
-        }
     }
 }

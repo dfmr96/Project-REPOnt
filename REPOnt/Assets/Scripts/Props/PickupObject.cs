@@ -24,6 +24,16 @@ namespace Props
             photonView.RPC(nameof(RPC_HandlePickup), RpcTarget.AllBuffered, actorView.ViewID);
         }
         
+        
+        public void SetPropData(PropData data)
+        {
+            propData = data;
+            if (rend != null && data != null)
+            {
+                rend.material.color = data.BaseColor;
+            }
+        } 
+        
         [PunRPC]
         public void RPC_HandlePickup(int playerViewID)
         {
@@ -38,15 +48,5 @@ namespace Props
 
             gameObject.SetActive(false);
         }
-        
-        public void SetPropData(PropData data)
-        {
-            propData = data;
-            if (rend != null && data != null)
-            {
-                rend.material.color = data.BaseColor;
-            }
-        }
-        
     }
 }
