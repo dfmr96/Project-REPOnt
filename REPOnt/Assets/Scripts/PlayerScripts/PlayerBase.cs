@@ -7,6 +7,7 @@ public abstract class PlayerBase : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] protected float interactCooldown = 3f;
     [SerializeField] private PlayerData data;
+    [SerializeField] private KeyCode interactKey = KeyCode.E;
     protected float interactTimer = 0f;
     
     [Header("Camera")]
@@ -37,7 +38,7 @@ public abstract class PlayerBase : MonoBehaviour
         
         interactTimer += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.E) && CanInteract())
+        if (Input.GetKeyDown(interactKey) && CanInteract())
         {
             Interact();
             interactTimer = 0f;

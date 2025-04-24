@@ -8,16 +8,18 @@ namespace PlayerScripts
     {
         [Header("Interaction")]
         [SerializeField] private float interactRange = 3f;
-        [SerializeField] private KeyCode interactKey = KeyCode.E;
-
         [SerializeField] GameObject currentHandObject;
+        
+        
         private Renderer currentHandObjectRenderer;
-
-        public int objectId;
-
         public GameObject CurrentHandObject => currentHandObject;
-
         public bool IsCaptured { get; private set; }
+        public int ObjectId { get; set; }
+
+
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Unity Methods
+        // ──────────────────────────────────────────────────────────────────────────────
         
         protected override void Start()
         {
@@ -25,36 +27,15 @@ namespace PlayerScripts
             GameManager.Instance.RegisterMover(this);
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
         }
-
-
-        public void Equip()
-        {
-            if (CurrentHandObject.activeSelf) return;
-            CurrentHandObject.SetActive(true);
-        }
-
-        public void DropHandObject()
-        {
-            currentHandObjectRenderer.material.color = Color.cyan;
-            CurrentHandObject.SetActive(false);
-        }
-
-        protected override void Update()
-        {
-            if (!photonView.IsMine) return;
-            
-            base.Update();
-            
-            if (Input.GetKeyDown(interactKey)) TryInteract();
-        }
-
-        private void TryInteract()
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Interaction Logic
+        // ──────────────────────────────────────────────────────────────────────────────
+        protected override void Interact()
         {
             Vector3 origin = transform.position;
             Vector3 direction = transform.forward;
-
             
-            //TODO Hacer interfaz IInteractable
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactRange))
             {
                 Debug.DrawRay(origin, direction * interactRange, Color.blue, 1f);
@@ -62,20 +43,44 @@ namespace PlayerScripts
                 if (hit.collider.TryGetComponent(out PickupObject pickup))
                 {
                     if (currentHandObject.activeInHierarchy) return;
-                    objectId = pickup.GetObjectId();
+                    
+                    ObjectId = pickup.GetObjectId();
                     currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
                     pickup.Interact(photonView);
+                    
                     Debug.Log("PickupObject Interacted");
                 }
                 else if (hit.collider.TryGetComponent(out DropZone dropZone))
                 {
-                    dropZone.Interact(photonView, objectId);
+                    dropZone.Interact(photonView, ObjectId);
+                    
                     Debug.Log("DropZone Interacted");
                 }
             }
-            else Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
+            else
+            {
+                Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
+            }
         }
         
+        // ──────────────────────────────────────────────────────────────────────────────
+        // State Management
+        // ──────────────────────────────────────────────────────────────────────────────
+        public void Equip()
+        {
+            if (CurrentHandObject.activeSelf) return;
+            CurrentHandObject.SetActive(true);
+        }
+        
+        public void DropHandObject()
+        {
+            currentHandObjectRenderer.material.color = Color.cyan;
+            CurrentHandObject.SetActive(false);
+        }
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // RPC
+        // ──────────────────────────────────────────────────────────────────────────────
         [PunRPC]
         public void MarkAsCaptured()
         {
