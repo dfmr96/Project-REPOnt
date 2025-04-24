@@ -6,54 +6,74 @@ namespace PlayerScripts
 {
     public class PlayerSpawner : MonoBehaviourPunCallbacks
     {
-        public Transform[] moverSpawnPoints;
-        public Transform ghostSpawnPoint;
-
-        public GameObject moverPrefab;
-        public GameObject ghostPrefab;
+        [Header("Spawn Points")]
+        [SerializeField] private Transform[] moverSpawnPoints;
+        [SerializeField] private Transform ghostSpawnPoint;
+        
+        [Header("Prefabs")]
+        [SerializeField] private GameObject moverPrefab;
+        [SerializeField] private GameObject ghostPrefab;
+        
+        private const string RoleKey = "Role";
+        private const string GhostRole = "Ghost";
+        private const string MoverRole = "Mover";
 
         void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            SpawnPlayerByRole();
+            
+            SpawnLocalPlayer();
         }
 
-        void SpawnPlayerByRole()
+        void SpawnLocalPlayer()
         {
             if (!PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Role", out object roleObj))
             {
                 Debug.LogWarning("No role found for player.");
-                Debug.LogWarning($"{PhotonNetwork.IsMasterClient} {PhotonNetwork.CurrentRoom.PlayerCount}");;
                 return;
             }
 
             string role = roleObj.ToString();
-
-            if (role == "Ghost")
+            
+            switch (role)
             {
-                PhotonNetwork.Instantiate(ghostPrefab.name, ghostSpawnPoint.position, Quaternion.identity);
-            }
-            else if (role == "Mover")
-            {
-                int spawnIndex = GetMoverSpawnIndex(PhotonNetwork.LocalPlayer);
-                spawnIndex = Mathf.Clamp(spawnIndex, 0, moverSpawnPoints.Length - 1); 
-
-                Vector3 spawnPos = moverSpawnPoints[spawnIndex].position;
-                PhotonNetwork.Instantiate(moverPrefab.name, spawnPos, Quaternion.identity);
+                case GhostRole:
+                    SpawnGhost();
+                    break;
+                case MoverRole:
+                    SpawnMover();
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown role: {role}");
+                    break;
             }
         }
+        
+        private void SpawnGhost()
+        {
+            PhotonNetwork.Instantiate(ghostPrefab.name, ghostSpawnPoint.position, Quaternion.identity);
+        }
+        
+        private void SpawnMover()
+        {
+            int index = GetMoverSpawnIndexByOrder(PhotonNetwork.LocalPlayer);
+            index = Mathf.Clamp(index, 0, moverSpawnPoints.Length - 1);
 
-        int GetMoverSpawnIndex(Player player)
+            Vector3 spawnPosition = moverSpawnPoints[index].position;
+            PhotonNetwork.Instantiate(moverPrefab.name, spawnPosition, Quaternion.identity);
+        }
+
+        private int GetMoverSpawnIndexByOrder(Player localPlayer)
         {
             int index = 0;
 
-            foreach (var p in PhotonNetwork.PlayerList)
+            foreach (var player in PhotonNetwork.PlayerList)
             {
-                if (p.ActorNumber == player.ActorNumber)
+                if (player.ActorNumber == localPlayer.ActorNumber)
                     break;
 
-                if (p.CustomProperties.TryGetValue("Role", out object r) && r.ToString() == "Mover")
+                if (player.CustomProperties.TryGetValue(RoleKey, out object role) && role.ToString() == MoverRole)
                     index++;
             }
 
