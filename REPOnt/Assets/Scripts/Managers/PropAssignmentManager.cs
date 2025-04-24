@@ -5,10 +5,16 @@ using Props;
 using ScriptableObjects;
 using UnityEngine;
 
+/// <summary>
+/// Assigns PropData to DropZones and PickupObjects at match start, only by MasterClient.
+/// Ensures consistency across network via Photon RPC.
+/// </summary>
+
 public class PropAssignmentManager : MonoBehaviourPun
 {
     [Header("Config")]
     [SerializeField] private PropsDatabase propsDatabase;
+    
     private List<DropZone> dropZones;
     private List<PickupObject> pickupObjects;
     private int propsToAssign = 0;
@@ -29,78 +35,64 @@ public class PropAssignmentManager : MonoBehaviourPun
     {
         yield return new WaitForSeconds(0.2f);
         Debug.Log("[PropAssignmentManager] Assigning props...");
-        AssignRandomPropsAsMaster();
+        AssignDataToGameObjects();
     }
     
-    private void AssignRandomPropsAsMaster()
+    private void AssignDataToGameObjects()
     {
-        
-        var allProps = new List<PropData>(propsDatabase.GetAll());
-        int available = Mathf.Min(allProps.Count, dropZones.Count, pickupObjects.Count);
-        int count = Mathf.Clamp(propsToAssign, 1, available);
+        //Obtain available props and ensure we don't assign more than we have
+        var availableProps = new List<PropData>(propsDatabase.GetAll());
+        int maxAssignable = Mathf.Min(availableProps.Count, dropZones.Count, pickupObjects.Count);
+        int count = Mathf.Clamp(propsToAssign, 1, maxAssignable);
 
-        List<PropData> selected = new();
-        for (int i = 0; i < count; i++)
-        {
-            int index = Random.Range(0, allProps.Count);
-            selected.Add(allProps[index]);
-            allProps.RemoveAt(index);
-        }
+        //Select unique props
+        List<PropData> selected = GetUniqueRandomProps(availableProps, count);
+        int[] dropPropIDs = GetIDsFromProps(selected);
         
-        List<int> dropzonesIndex = new();
-        for (int i = 0; i < dropZones.Count; i++) dropzonesIndex.Add(i);
-        Shuffle(dropzonesIndex);
-        int[] chosenDropZones = dropzonesIndex.GetRange(0, count).ToArray();
+        //Choose random dropzones
+        int[] chosenDropZonesIndices = GetRandomIndices(dropZones.Count, count);
 
+        //Shuffle props for pickup objects and get IDs
+        List<PropData> shuffledForPickup = new(selected);
+        Shuffle(shuffledForPickup);
+        int[] pickupPropIDs = GetIDsFromProps(shuffledForPickup);
         
-
-        int[] dropIDs = new int[count];
-        for (int i = 0; i < count; i++)
-        {
-            dropIDs[i] = selected[i].ID;
-        }
-        
-        List<PropData> shuffled = new(selected);
-        Shuffle(shuffled);
-        
-        int[] pickupIDs = new int[count];
-        for (int i = 0; i < count; i++)
-        {
-            pickupIDs[i] = shuffled[i].ID;
-        }
-        // RPC_ApplyPropAssignment(dropIDs,pickupIDs);
-        photonView.RPC(nameof(RPC_ApplyPropAssignment), RpcTarget.AllBuffered, chosenDropZones, dropIDs, pickupIDs);
+        photonView.RPC(nameof(RPC_ApplyPropAssignment), RpcTarget.AllBuffered, chosenDropZonesIndices, dropPropIDs, pickupPropIDs);
     }
     
     [PunRPC]
-    private void RPC_ApplyPropAssignment(int[] chosenDropzones, int[] dropIDs, int[] pickupIDs)
+    private void RPC_ApplyPropAssignment(int[] chosenDropZonesIndices, int[] dropIDs, int[] pickupIDs)
     {
-        HashSet<int> chosenSet = new(chosenDropzones);
-
+        // Disable unselected zones
+        var selectedDropIndices = new HashSet<int>(chosenDropZonesIndices);
         for (int i = 0; i < dropZones.Count; i++)
         {
-            if (!chosenSet.Contains(i))
-            {
+            if (!selectedDropIndices.Contains(i))
                 dropZones[i].gameObject.SetActive(false);
-            }
         }
-        
+
+        // Assign PropData to Zones
         for (int i = 0; i < dropIDs.Length; i++)
         {
             var data = propsDatabase.GetByID(dropIDs[i]);
             if (data != null)
-                dropZones[chosenDropzones[i]].SetPropData(data);
+                dropZones[chosenDropZonesIndices[i]].SetPropData(data);
         }
-        
+
+        // Assign PropData to PickUpObjects
         for (int i = 0; i < pickupIDs.Length; i++)
         {
             var data = propsDatabase.GetByID(pickupIDs[i]);
             if (data != null)
                 pickupObjects[i].SetPropData(data);
         }
-        
+
         Debug.Log("[PropAssignmentManager] Props assigned successfully.");
     }
+    
+    // ──────────────────────────────────────────────────────────────────────────────
+    // Helpers
+    // ──────────────────────────────────────────────────────────────────────────────
     
     private void Shuffle<T>(List<T> list)
     {
@@ -109,5 +101,33 @@ public class PropAssignmentManager : MonoBehaviourPun
             int rand = Random.Range(i, list.Count);
             (list[i], list[rand]) = (list[rand], list[i]);
         }
+    }
+    
+    private List<PropData> GetUniqueRandomProps(List<PropData> available, int count)
+    {
+        List<PropData> result = new();
+        for (int i = 0; i < count; i++)
+        {
+            int index = Random.Range(0, available.Count);
+            result.Add(available[index]);
+            available.RemoveAt(index);
+        }
+        return result;
+    }
+    
+    private int[] GetIDsFromProps(List<PropData> props)
+    {
+        int[] ids = new int[props.Count];
+        for (int i = 0; i < props.Count; i++)
+            ids[i] = props[i].ID;
+        return ids;
+    }
+    
+    private int[] GetRandomIndices(int max, int count)
+    {
+        List<int> indices = new();
+        for (int i = 0; i < max; i++) indices.Add(i);
+        Shuffle(indices);
+        return indices.GetRange(0, count).ToArray();
     }
 }
