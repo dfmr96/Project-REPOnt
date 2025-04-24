@@ -350,10 +350,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6247b0473510c3244b9015da37ae186c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactCooldown: 3
   data: {fileID: 11400000, guid: bc0b9039ee7ab104ea01beef2015f86f, type: 2}
+  interactKey: 101
   playerCamera: {fileID: 1193260903549206958}
   interactionRange: 5
-  interactCooldown: 3
   teleportTarget: {fileID: 0}
   debugHighlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &1111213847345604943

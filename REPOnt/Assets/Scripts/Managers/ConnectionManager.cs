@@ -56,13 +56,13 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersRequired && PhotonNetwork.IsMasterClient)
+        /*if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersRequired && PhotonNetwork.IsMasterClient)
         {
             AssignRoles();
             
             StartCoroutine(WaitBeforeStartingGame()); 
             //Setear los roles es asincrono y entra en race condition usando directamente LoadLevel
-        }
+        }*/
     }
     public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
     
@@ -108,6 +108,14 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsConnected) return;
 
         PhotonNetwork.JoinRandomRoom();
+    }
+    
+    public void StartGame()
+    {
+        if (!PhotonNetwork.IsMasterClient || !CanStartGame()) return;
+
+        AssignRoles();
+        StartCoroutine(WaitBeforeStartingGame());
     }
     
     // ──────────────────────────────────────────────────────────────────────────────
