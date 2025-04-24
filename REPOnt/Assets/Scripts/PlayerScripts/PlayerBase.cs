@@ -2,10 +2,12 @@ using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
-public class PlayerBase : MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour
 {
     [Header("Player Settings")]
+    [SerializeField] protected float interactCooldown = 3f;
     [SerializeField] private PlayerData data;
+    protected float interactTimer = 0f;
     
     [Header("Camera")]
     [SerializeField] private Camera playerCamera;
@@ -32,10 +34,18 @@ public class PlayerBase : MonoBehaviour
         if (!photonView.IsMine) return;
         HandleMovement();
         HandleLook();
+        
+        interactTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.E) && CanInteract())
+        {
+            Interact();
+            interactTimer = 0f;
+        }
     }
     
     // ──────────────────────────────────────────────────────────────────────────────
-    // Movement & Look
+    // Character Logic
     // ──────────────────────────────────────────────────────────────────────────────
 
     protected virtual void HandleMovement()
@@ -72,6 +82,10 @@ public class PlayerBase : MonoBehaviour
             listener.enabled = false;
         }
     }
+    
+    protected bool CanInteract() => interactTimer >= interactCooldown;
+    
+    protected abstract void Interact();
 
     // ──────────────────────────────────────────────────────────────────────────────
     // RPC

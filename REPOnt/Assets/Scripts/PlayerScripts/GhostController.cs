@@ -5,21 +5,20 @@ namespace PlayerScripts
 {
     public class GhostController : PlayerBase
     {
-        [Header("Interaction")] [SerializeField]
-        private float interactionRange = 5f;
-
-        [SerializeField] private float interactCooldown = 3f;
+        [Header("Interaction")] 
+        [SerializeField] private float interactionRange = 5f;
         [SerializeField] private Transform teleportTarget;
-
+        
 #if UNITY_EDITOR
-        [Header("Debug Highlight")] [SerializeField]
-        private Color debugHighlightColor = Color.yellow;
-
+        [Header("Debug Highlight")] 
+        [SerializeField] private Color debugHighlightColor = Color.yellow;
         private Renderer lastDebugRenderer;
         private Color lastOriginalColor;
 #endif
 
-        private float interactTimer = 0;
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Unity Methods
+        // ──────────────────────────────────────────────────────────────────────────────
 
         protected override void Awake()
         {
@@ -30,62 +29,57 @@ namespace PlayerScripts
         protected override void Update()
         {
             if (!photonView.IsMine) return;
-            
+
+#if UNITY_EDITOR
+            DebugHighlightMover(transform.position, transform.forward);
+#endif
             base.Update();
+        }
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Character Logic
+        // ──────────────────────────────────────────────────────────────────────────────
 
-            interactTimer += Time.deltaTime;
-
+        protected override void Interact()
+        {
             Vector3 origin = transform.position;
             Vector3 direction = transform.forward;
 
-#if UNITY_EDITOR
-            DebugHighlightMover(origin, direction);
-#endif
-            if (Input.GetKeyDown(KeyCode.E) && interactTimer > interactCooldown) TryInteract(origin, direction);
-        }
-
-        private void TryInteract(Vector3 origin, Vector3 direction)
-        {
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactionRange))
             {
-                Debug.Log(
-                    $"[TryInteract] Hit: {hit.collider.name}, Tag: {hit.collider.tag}, Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
-
-                if (!hit.collider.CompareTag("Mover")) return;
-
-                if (hit.collider.TryGetComponent<PhotonView>(out PhotonView targetPV))
+                if (hit.collider.CompareTag("Mover") && hit.collider.TryGetComponent(out PhotonView targetPV))
                 {
-                    Debug.Log($"[GhostInteraction] Hit mover: {targetPV.name}");
-                    
+                    Debug.Log($"[Ghost] Capturing mover: {targetPV.name}");
                     targetPV.RPC("TeleportToLocation", targetPV.Owner, teleportTarget.position);
-                    //TODO Podria incluirse ambos RPC en un metodo 'GetCaptured' en el mover y llamar a un 'Capture Mover' en el Ghost para mejor lectura
                     targetPV.RPC("MarkAsCaptured", RpcTarget.AllBuffered);
-                    
-                    interactTimer = 0f;
-                    
                 }
             }
         }
+        
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Debug methods
+        // ──────────────────────────────────────────────────────────────────────────────
 
 #if UNITY_EDITOR
         private void DebugHighlightMover(Vector3 origin, Vector3 direction)
         {
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactionRange) &&
-                hit.collider.CompareTag("Mover"))
+                hit.collider.CompareTag("Mover") &&
+                hit.collider.TryGetComponent(out Renderer rend))
             {
-                if (hit.collider.TryGetComponent(out Renderer rend))
+                if (rend != lastDebugRenderer)
                 {
-                    if (rend != lastDebugRenderer)
-                    {
-                        ClearLastDebugHighlight();
-                        lastDebugRenderer = rend;
-                        lastOriginalColor = rend.material.color;
-                    }
-
-                    rend.material.color = debugHighlightColor;
+                    ClearLastDebugHighlight();
+                    lastDebugRenderer = rend;
+                    lastOriginalColor = rend.material.color;
                 }
+
+                rend.material.color = debugHighlightColor;
             }
-            else ClearLastDebugHighlight();
+            else
+            {
+                ClearLastDebugHighlight();
+            }
         }
 
         private void ClearLastDebugHighlight()
