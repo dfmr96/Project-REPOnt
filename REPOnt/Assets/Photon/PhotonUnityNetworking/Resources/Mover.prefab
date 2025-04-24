@@ -384,12 +384,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2efae4bdb9f024980767209f19916c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactCooldown: 3
   data: {fileID: 11400000, guid: 8369a2ddada21cf4ea7c8025ee79bce9, type: 2}
+  interactKey: 101
   playerCamera: {fileID: 1193260903549206958}
   interactRange: 3
-  interactKey: 101
   currentHandObject: {fileID: 5908596995860277552}
-  objectId: 0
 --- !u!1 &5908596995860277552
 GameObject:
   m_ObjectHideFlags: 0

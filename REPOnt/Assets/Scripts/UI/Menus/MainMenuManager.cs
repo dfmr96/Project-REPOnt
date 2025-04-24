@@ -23,7 +23,7 @@ public class MainMenuManager : MonoBehaviour
     { 
         hostPanel.SetActive(true);
         mainPanel.SetActive(false);
-        hostPanel.GetComponent<HostPanel>().GetButtonId();
+        hostPanel.GetComponent<HostPanel>().DisplayRoomId();
         ConnectionManager.Instance.OnRoomCreated -= OnRoomCreated;
     }
 

@@ -6,33 +6,73 @@ using System;
 
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
-    public static ConnectionManager Instance;
+    public static ConnectionManager Instance { get; private set; }
     public Action OnConnectToMaster;
     public Action OnRoomCreated;
     public Action<int> OnRoomJoined;
     public Action<string> OnRoomJoinUpdated;
     [SerializeField] private int sceneToLoad = 1;
-    [SerializeField] private const int MinPlayersRequired = 3;
+    [SerializeField] private int minPlayersRequired = 3;
+    private const string RoleKey = "Role";
+    private const string GhostRole = "Ghost";
+    private const string MoverRole = "Mover";
+    
+    // ──────────────────────────────────────────────────────────────────────────────
+    // Unity Methods
+    // ──────────────────────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
+        if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
     private void Start() { ConnectToPhoton(); }
-
-    public void ConnectToPhoton()
-    {
-        if (!PhotonNetwork.IsConnected)
-            PhotonNetwork.ConnectUsingSettings();
-    }
+    
+    // ──────────────────────────────────────────────────────────────────────────────
+    // Pun Callbacks
+    // ──────────────────────────────────────────────────────────────────────────────
 
     public override void OnConnectedToMaster()
     {
         OnConnectToMaster?.Invoke();
         PhotonNetwork.AutomaticallySyncScene = true;
+    }
+    public override void OnCreatedRoom() 
+    { 
+        OnRoomCreated?.Invoke();
+        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
+    }
+    public override void OnJoinedRoom()
+    {
+        OnRoomJoinUpdated?.Invoke("Joined");
+        PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
+        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
+    }
+    public override void OnJoinRoomFailed(short returnCode, string message) { OnRoomJoinUpdated.Invoke(message); }
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
+        /*if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersRequired && PhotonNetwork.IsMasterClient)
+        {
+            AssignRoles();
+            
+            StartCoroutine(WaitBeforeStartingGame()); 
+            //Setear los roles es asincrono y entra en race condition usando directamente LoadLevel
+        }*/
+    }
+    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
+    
+    // ──────────────────────────────────────────────────────────────────────────────
+    // Public API
+    // ──────────────────────────────────────────────────────────────────────────────
+    public void ConnectToPhoton()
+    {
+        if (!PhotonNetwork.IsConnected)
+            PhotonNetwork.ConnectUsingSettings();
     }
 
     public void CreateRoom()
@@ -41,45 +81,16 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(GenerateId());
     }
 
-    public override void OnCreatedRoom() 
-    { 
-        OnRoomCreated?.Invoke();
-        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-    }
-
-    public string GetRunId() {  return PhotonNetwork.CurrentRoom.Name; }
-
     public void JoinRoom(string roomId)
     {
         if (!PhotonNetwork.IsConnected) return;
         PhotonNetwork.JoinRoom(roomId);
     }
-
-    public override void OnJoinRoomFailed(short returnCode, string message) { OnRoomJoinUpdated.Invoke(message); }
-
-    public override void OnJoinedRoom()
-    {
-        OnRoomJoinUpdated?.Invoke("Joined");
-        PhotonNetwork.NickName = "Player " + PhotonNetwork.PlayerList.Length;
-        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-    }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= MinPlayersRequired && PhotonNetwork.IsMasterClient)
-        {
-            AssignRoles();
-            
-            StartCoroutine(WaitBeforeStartingGame()); 
-            //Setear los roles es asincrono y entra en race condition usando directamente LoadLevel
-        }
-    }
-
-    public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
-
+    public string GetRoomId() {  return PhotonNetwork.CurrentRoom.Name; }
     public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
 
+    public bool CanStartGame() => PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersRequired;
+    
     private string GenerateId()
     {
         string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -92,40 +103,44 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
         return id;
     }
+    public void JoinRandomRoom()
+    {
+        if (!PhotonNetwork.IsConnected) return;
 
-    public void AssignRoles(int minPlayersRequired = MinPlayersRequired)
+        PhotonNetwork.JoinRandomRoom();
+    }
+    
+    public void StartGame()
+    {
+        if (!PhotonNetwork.IsMasterClient || !CanStartGame()) return;
+
+        AssignRoles();
+        StartCoroutine(WaitBeforeStartingGame());
+    }
+    
+    // ──────────────────────────────────────────────────────────────────────────────
+    // Role Assignment
+    // ──────────────────────────────────────────────────────────────────────────────
+
+    public void AssignRoles()
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
         var players = PhotonNetwork.PlayerList;
         if (players.Length < minPlayersRequired) return;
 
-        int ghostIndex = 0;
-        
-#if UNITY_EDITOR
-    // El Ghost será siempre el MasterClient (jugador que crea la sala)
-        Player master = PhotonNetwork.MasterClient;
-        for (int i = 0; i < players.Length; i++)
-        {
-            if (players[i] == master)
-            {
-                ghostIndex = i;
-                break;
-            }
-        }
-#else
-        //En builds normales: Ghost aleatorio
-        ghostIndex = UnityEngine.Random.Range(0, players.Length);
-#endif
+        int ghostIndex = GetGhostIndex(players);
 
         for (int i = 0; i < players.Length; i++)
         {
-            string role = (i == ghostIndex) ? "Ghost" : "Mover";
+            string role = (i == ghostIndex) ? GhostRole : MoverRole;
             string host = (PhotonNetwork.PlayerList[i].IsMasterClient) ? "Host" : "Guest";
             string nickname = $"Player {i + 1}, ({host})";
 
-            ExitGames.Client.Photon.Hashtable roleProp = new ExitGames.Client.Photon.Hashtable();
-            roleProp["Role"] = role;
+            var roleProp = new ExitGames.Client.Photon.Hashtable
+            {
+                [RoleKey] = role
+            };
 
             players[i].SetCustomProperties(roleProp);
             
@@ -133,19 +148,20 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
     }
     
+    private int GetGhostIndex(Player[] players)
+    {
+#if UNITY_EDITOR
+        return Array.FindIndex(players, p => p == PhotonNetwork.MasterClient);
+#else
+    return UnityEngine.Random.Range(0, players.Length);
+#endif
+    }
+    
     private IEnumerator WaitBeforeStartingGame()
     {
-        AssignRoles();
-        
         yield return new WaitForSeconds(0.5f);
 
         PhotonNetwork.LoadLevel(sceneToLoad);
     }
     
-    public void JoinRandomRoom()
-    {
-        if (!PhotonNetwork.IsConnected) return;
-
-        PhotonNetwork.JoinRandomRoom();
-    }
 }
