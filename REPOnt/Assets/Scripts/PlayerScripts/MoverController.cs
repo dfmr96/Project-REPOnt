@@ -1,3 +1,4 @@
+using Interfaces;
 using Photon.Pun;
 using Props;
 using UnityEngine;
@@ -35,32 +36,32 @@ namespace PlayerScripts
         {
             Vector3 origin = transform.position;
             Vector3 direction = transform.forward;
-            
+
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactRange))
             {
                 Debug.DrawRay(origin, direction * interactRange, Color.blue, 1f);
 
-                if (hit.collider.TryGetComponent(out PickupObject pickup))
+                if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
-                    if (currentHandObject.activeInHierarchy) return;
-                    
-                    ObjectId = pickup.GetObjectId();
-                    currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
-                    pickup.Interact(photonView);
-                    
-                    Debug.Log("PickupObject Interacted");
-                }
-                else if (hit.collider.TryGetComponent(out DropZone dropZone))
-                {
-                    dropZone.Interact(photonView, ObjectId);
-                    
-                    Debug.Log("DropZone Interacted");
+                    interactable.Interact(photonView, ObjectId);
                 }
             }
             else
             {
                 Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
             }
+        }
+        
+        public void PickupObject(PickupObject pickup)
+        {
+            ObjectId = pickup.PropID;
+            if (CurrentHandObject != null)
+            {
+                CurrentHandObject.SetActive(true);
+                currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
+            }
+
+            Debug.Log($"[Mover] Picked up object with ID {ObjectId}");
         }
         
         // ──────────────────────────────────────────────────────────────────────────────

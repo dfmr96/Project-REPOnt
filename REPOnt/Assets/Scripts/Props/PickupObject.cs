@@ -1,70 +1,52 @@
 using System;
+using Interfaces;
 using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
 
 namespace Props
 {
-    public class PickupObject : MonoBehaviourPun
+    public class PickupObject : MonoBehaviourPun, IInteractable
     {
         [SerializeField] private PropData propData;
         [SerializeField] private Renderer rend;
-
         public PropData PropData => propData;
+        public int PropID => propData.ID;
 
         private void Start()
         {
-            rend = GetComponent<Renderer>();
-            //The assignment is done in the PropAssignmentManager
-            /*if (propData != null && rend != null)
-            {
-                rend.material.color = propData.BaseColor;
-            }*/
+            if (rend == null)
+                rend = GetComponent<Renderer>();
         }
-
-        public void Interact(PhotonView playerPhotonView)
+        
+        public void Interact(PhotonView actorView, int _ = -1)
         {
-            if (playerPhotonView != null) photonView.RPC(nameof(RPC_HandlePickup), RpcTarget.AllBuffered, playerPhotonView.ViewID);
+            photonView.RPC(nameof(RPC_HandlePickup), RpcTarget.AllBuffered, actorView.ViewID);
         }
-
-        public int GetObjectId() { return PropData.ID; }
-
+        
         [PunRPC]
         public void RPC_HandlePickup(int playerViewID)
         {
-            //TODO Intentar pasar player a través del RPC para no usar Find (Si no funciona, es que los tipo de parametro validos de los RPC son limitados)
-            //TODO Utilizar TryGetComponent para ahorrar if's
-            //TODO Borrar debugs cuando lo de arriba funcione
-            GameObject player = PhotonView.Find(playerViewID)?.gameObject;
-
-            if (player == null)
-            {
-                Debug.LogWarning("Player GameObject not found via PhotonView ID");
-                return;
-            }
-            //TODO Sacar el texto suelto de mover y llevarlo a un metodo en MoverController
-            MoverController mover = player.GetComponent<MoverController>();
+            var mover = GameManager.Instance.GetMoverByViewID(playerViewID);
             if (mover == null)
             {
                 Debug.LogWarning("MoverController not found on player");
                 return;
             }
             
-            if (mover.CurrentHandObject != null) { mover.CurrentHandObject.SetActive(false); }
+            mover.PickupObject(this);
 
             gameObject.SetActive(false);
-            mover.Equip();
         }
         
         public void SetPropData(PropData data)
         {
             propData = data;
-
-            if (rend != null && PropData != null)
+            if (rend != null && data != null)
             {
-                rend.material.color = PropData.BaseColor;
+                rend.material.color = data.BaseColor;
             }
         }
-        //TODO DropZone y PickObject tienen varios metodos en comun. Se podrian unificar en una clase base
+        
     }
 }

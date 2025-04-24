@@ -1,11 +1,12 @@
 using System;
+using Interfaces;
 using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
 
 namespace Props
 {
-    public class DropZone : MonoBehaviourPun
+    public class DropZone : MonoBehaviourPun, IInteractable
     {
         [SerializeField] private Color placedColor = Color.green;
         [SerializeField] private PropData propData;

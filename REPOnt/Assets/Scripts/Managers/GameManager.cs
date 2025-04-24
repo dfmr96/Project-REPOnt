@@ -152,4 +152,18 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     private void RPC_UpdateCapturedPlayers() { UIManager.Instance.UpdateCapturedMovers(capturedMovers, PhotonNetwork.PlayerList.Length - 1); }
 
+    // ──────────────────────────────────────────────────────────────────────────────
+    // Helper Methods
+    // ──────────────────────────────────────────────────────────────────────────────
+    
+    public MoverController GetMoverByViewID(int viewID)
+    {
+        foreach (var mover in movers)
+        {
+            if (mover.TryGetComponent(out PhotonView view) && view.ViewID == viewID)
+                return mover;
+        }
+        return null;
+    }
+
 }
