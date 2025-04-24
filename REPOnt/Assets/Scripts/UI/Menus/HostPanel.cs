@@ -34,6 +34,13 @@ public class HostPanel : MonoBehaviour
             idText.text = $"Room ID: {ConnectionManager.Instance.GetRoomId()}";
         }
     }
+    
+    public void CopyRoomIdToClipboard()
+    {
+        string roomId = ConnectionManager.Instance.GetRoomId();
+        GUIUtility.systemCopyBuffer = roomId;
+        Debug.Log($"Room ID copied to clipboard: {roomId}");
+    }
 
     private void HandlePlayerCount(int quantity)
     {
