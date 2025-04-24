@@ -6,33 +6,13 @@ using UnityEngine;
 
 namespace Props
 {
-    public class PickupObject : MonoBehaviourPun, IInteractable
+    public class PickupObject : PropBehaviourBase, IInteractable
     {
-        [SerializeField] private PropData propData;
-        [SerializeField] private Renderer rend;
-        public PropData PropData => propData;
-        public int PropID => propData.ID;
-
-        private void Start()
-        {
-            if (rend == null)
-                rend = GetComponent<Renderer>();
-        }
-        
+        protected override Color GetAssignedColor() => propData.BaseColor;
         public void Interact(PhotonView actorView, int _ = -1)
         {
             photonView.RPC(nameof(RPC_HandlePickup), RpcTarget.AllBuffered, actorView.ViewID);
         }
-        
-        
-        public void SetPropData(PropData data)
-        {
-            propData = data;
-            if (rend != null && data != null)
-            {
-                rend.material.color = data.BaseColor;
-            }
-        } 
         
         [PunRPC]
         public void RPC_HandlePickup(int playerViewID)

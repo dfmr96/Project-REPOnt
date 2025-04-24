@@ -6,34 +6,17 @@ using UnityEngine;
 
 namespace Props
 {
-    public class DropZone : MonoBehaviourPun, IInteractable
+    public class DropZone : PropBehaviourBase, IInteractable
     {
         [SerializeField] private Color placedColor = Color.green;
-        [SerializeField] private PropData propData;
-        [SerializeField] private Renderer rend;
-        
         private bool isPlaced = false;
         public bool IsPlaced => isPlaced;
-        
-        private void Start()
-        {
-            if (rend == null)
-                rend = GetComponent<Renderer>();
-        }
-
+        protected override Color GetAssignedColor() => propData.DropZoneColor;
+ 
         public void Interact(PhotonView playerPhotonView, int objectId)
         {
             if (isPlaced || objectId != propData.ID) return;
-
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
-        }
-        public void SetPropData(PropData data)
-        {
-            propData = data;
-            isPlaced = false;
-
-            if (rend != null && data != null)
-                rend.material.color = data.DropZoneColor;
         }
 
         [PunRPC]
@@ -47,6 +30,5 @@ namespace Props
             rend.material.color = placedColor;
             GameManager.Instance.RegisterPropPlaced();
         }
-        
     }
 }
