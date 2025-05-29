@@ -334,6 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &5854862
 BoxCollider:
@@ -1008,6 +1009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
 --- !u!114 &55843041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1483,6 +1485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &79134582
 BoxCollider:
@@ -2427,6 +2430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &229856964
 BoxCollider:
@@ -2606,6 +2610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &230951804
 BoxCollider:
@@ -3386,6 +3391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &301367543
 BoxCollider:
@@ -3670,6 +3676,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &329701371
 BoxCollider:
@@ -3954,6 +3961,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &344693858
 BoxCollider:
@@ -4133,6 +4141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &365550909
 BoxCollider:
@@ -6605,6 +6614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &761158913
 BoxCollider:
@@ -7871,6 +7881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &921842789
 BoxCollider:
@@ -8745,6 +8756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1008916657
 BoxCollider:
@@ -9240,6 +9252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1088160319
 BoxCollider:
@@ -9945,6 +9958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1172641771
 BoxCollider:
@@ -10910,6 +10924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
 --- !u!114 &1333591978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11671,6 +11686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1455373450
 BoxCollider:
@@ -12166,6 +12182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1532064096
 BoxCollider:
@@ -12636,6 +12653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
 --- !u!114 &1602986874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13395,6 +13413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1727615057
 BoxCollider:
@@ -14629,6 +14648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1835939562
 BoxCollider:
@@ -14808,6 +14828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  _meshFilter: {fileID: 0}
   placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1864908883
 BoxCollider:
