@@ -332,9 +332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &5854862
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1205,6 +1205,7 @@ MonoBehaviour:
   propProgressText: {fileID: 156332813}
   moversCapturedText: {fileID: 998883906}
   timerText: {fileID: 33648944}
+  warningTimeThreshold: 30
 --- !u!4 &60459760
 Transform:
   m_ObjectHideFlags: 0
@@ -1284,7 +1285,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propsToWin: 3
-  propsPlaced: 0
   matchDurationSeconds: 120
   prisonPoint: {fileID: 72506195}
   dropZones:
@@ -1311,6 +1311,9 @@ MonoBehaviour:
   - {fileID: 1602986873}
   - {fileID: 55843040}
   - {fileID: 0}
+  propsPlaced: 0
+  matchStartTime: 0
+  capturedMovers: 0
 --- !u!4 &77982596
 Transform:
   m_ObjectHideFlags: 0
@@ -1478,9 +1481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &79134582
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2422,9 +2425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &229856964
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2601,9 +2604,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &230951804
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3381,9 +3384,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &301367543
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3665,9 +3668,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &329701371
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3949,9 +3952,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &344693858
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4128,9 +4131,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &365550909
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6600,9 +6603,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &761158913
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7866,9 +7869,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &921842789
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8740,9 +8743,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1008916657
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9235,9 +9238,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1088160319
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9940,9 +9943,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1172641771
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11666,9 +11669,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1455373450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12161,9 +12164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1532064096
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13390,9 +13393,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1727615057
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14624,9 +14627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1835939562
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14803,9 +14806,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a4b9efb3843f5bb05383b21b381be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedColor: {r: 0, g: 1, b: 0, a: 1}
   propData: {fileID: 0}
   rend: {fileID: 0}
+  placedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1864908883
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16362,6 +16365,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 57054452}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2054733366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2054733368}
+  - component: {fileID: 2054733367}
+  m_Layer: 7
+  m_Name: PostProcessVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2054733367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054733366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 91898d302af6458468c265efd0673826, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!4 &2054733368
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054733366}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2055633087
 GameObject:
   m_ObjectHideFlags: 0
@@ -16983,3 +17035,4 @@ SceneRoots:
   - {fileID: 21162880}
   - {fileID: 1892969646}
   - {fileID: 60459760}
+  - {fileID: 2054733368}
