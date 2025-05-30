@@ -16,4 +16,4 @@ MonoBehaviour:
   id: 2
   baseColor: {r: 0.15, g: 0.68, b: 0.38, a: 1}
   dropZoneColor: {r: 0.15, g: 0.68, b: 0.38, a: 0.4}
-  propMesh: {fileID: 4300004, guid: 45e438e80c2860545b63beb8d6718edd, type: 3}
+  prefab: {fileID: 1651051561760048436, guid: 8c864d19f70afcb48a134a4cff95985c, type: 3}

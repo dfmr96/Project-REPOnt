@@ -7,7 +7,7 @@ namespace Props
     {
         [SerializeField] protected PropData propData;
         [SerializeField] protected Renderer rend;
-        [SerializeField] protected MeshFilter _meshFilter;
+        //[SerializeField] protected Transform bodyTransform;
 
         public PropData PropData => propData;
         public int PropID => propData.ID;
@@ -16,14 +16,13 @@ namespace Props
         {
             if (rend == null)
                 rend = GetComponent<Renderer>();
-            _meshFilter = GetComponent<MeshFilter>();
         }
 
         public virtual void SetPropData(PropData data)
         {
             propData = data;
             ApplyColor();
-            ApplyMesh();
+            InstantiateProp();
         }
 
         protected virtual void ApplyColor()
@@ -31,10 +30,23 @@ namespace Props
             if (rend != null && propData != null)
                 rend.material.color = GetAssignedColor();
         }
-        
-        protected virtual void ApplyMesh()
+
+        protected virtual void InstantiateProp()
         {
-            _meshFilter.mesh = propData.PropMesh;
+            GameObject newProp = Instantiate(propData.Prefab, transform.position, transform.rotation);
+            newProp.transform.SetParent(transform);
+            Collider childCollider = newProp.GetComponentInChildren<Collider>();
+            if (childCollider != null)
+            {
+                System.Type colliderType = childCollider.GetType();
+                Collider copied = gameObject.AddComponent(colliderType) as Collider;
+                childCollider.enabled = false;
+                if (copied is BoxCollider box && childCollider is BoxCollider originalBox)
+                {
+                    box.center = originalBox.center;
+                    box.size = originalBox.size;
+                }
+            }
         }
 
         protected abstract Color GetAssignedColor();
