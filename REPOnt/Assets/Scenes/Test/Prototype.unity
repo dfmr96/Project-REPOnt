@@ -1173,7 +1173,6 @@ MonoBehaviour:
   - {fileID: 1333591977}
   - {fileID: 1602986873}
   - {fileID: 55843040}
-  - {fileID: 0}
   propsPlaced: 0
   matchStartTime: 0
   capturedMovers: 0
