@@ -33,7 +33,7 @@ public class NonPhysicsCompensation : MonoBehaviourPun, IPunObservable
                positionAtLastPacket = transform.position;
                networkPosition = (Vector3)stream.ReceiveNext();
                lastPacketTime = currentPacketTime;
-               currentPacketTime = info.timestamp;
+               currentPacketTime = info.SentServerTimestamp;
           }
      }
 }
