@@ -2,6 +2,7 @@ using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
+[RequireComponent(typeof(NonPhysicsCompensation))]
 public abstract class PlayerBase : MonoBehaviour
 {
     [Header("Player Settings")]
