@@ -1,5 +1,6 @@
 using Interfaces;
 using Photon.Pun;
+using Photon.Voice.Unity;
 using Props;
 using UnityEngine;
 
@@ -10,8 +11,11 @@ namespace PlayerScripts
         [Header("Interaction")]
         [SerializeField] private float interactRange = 3f;
         [SerializeField] GameObject currentHandObject;
-        
-        
+        [Header("Player Settings")]
+        [SerializeField] private KeyCode pushToTalkKey = KeyCode.J;
+        private Recorder rec;
+
+
         private Renderer currentHandObjectRenderer;
         public GameObject CurrentHandObject => currentHandObject;
         public bool IsCaptured { get; private set; }
@@ -27,8 +31,22 @@ namespace PlayerScripts
             base.Start();
             GameManager.Instance.RegisterMover(this);
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
+            rec = GetComponent<Recorder>();
         }
-        
+
+        protected override void Update()
+        {
+            base.Update();
+            if (Input.GetKeyDown(pushToTalkKey))
+            {
+                rec.TransmitEnabled = true;
+            }
+            else if (Input.GetKeyUp(pushToTalkKey))
+            {
+                rec.TransmitEnabled = false;
+            }
+        }
+
         // ──────────────────────────────────────────────────────────────────────────────
         // Interaction Logic
         // ──────────────────────────────────────────────────────────────────────────────
