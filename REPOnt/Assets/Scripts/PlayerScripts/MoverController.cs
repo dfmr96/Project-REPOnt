@@ -58,7 +58,7 @@ namespace PlayerScripts
             if (CurrentHandObject != null)
             {
                 CurrentHandObject.SetActive(true);
-                currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
+                //currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
             }
 
             Debug.Log($"[Mover] Picked up object with ID {ObjectId}");
