@@ -17,12 +17,10 @@ namespace PlayerScripts
         private Recorder rec;
         [Header("Player Dependences")]
         [SerializeField] private GameObject micUIPrefab;
-        [SerializeField] private GameObject objUIPrefab;
         [SerializeField] private GameObject playerCanvasPrefab;
         [SerializeField] private AudioClip radioSound;
         private GameObject playerCanvas;
         private GameObject micUIInstance;
-        private GameObject objUIInstance;
         private AudioSource audioSource;
 
         private Renderer currentHandObjectRenderer;
@@ -90,10 +88,6 @@ namespace PlayerScripts
             if (CurrentHandObject != null)
             {
                 CurrentHandObject.SetActive(true);
-                if (objUIInstance == null) { Instantiate(objUIPrefab, playerCanvas.transform); }
-                objUIInstance.GetComponent<Image>().sprite = objImage;
-                objUIInstance.GetComponent<Image>().color = objColor;
-                objUIInstance.SetActive(true);
                 //currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
             }
             
@@ -120,7 +114,6 @@ namespace PlayerScripts
         {
             currentHandObjectRenderer.material.color = Color.cyan;
             CurrentHandObject.SetActive(false);
-            objUIInstance.SetActive(false);
             ResetSpeed();
         }
 
