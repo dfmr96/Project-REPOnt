@@ -12,6 +12,7 @@ namespace Props
         public string outputFolder = "Assets/PropIcons";
         public GameObject[] propsToRender;
 
+        #if UNITY_EDITOR
         [ContextMenu("Generate Sprites")]
         public void GenerateSprites()
         {
@@ -58,5 +59,6 @@ namespace Props
             DestroyImmediate(rt);
             AssetDatabase.Refresh();
         }
+        #endif
     }
 }
