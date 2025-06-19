@@ -18,7 +18,7 @@ namespace Props
             RenderTexture rt = new RenderTexture(resolution.x, resolution.y, 24);
             renderCamera.targetTexture = rt;
             renderCamera.clearFlags = CameraClearFlags.SolidColor;
-            renderCamera.backgroundColor = new Color(0, 0, 0, 0); // Fondo transparente
+            renderCamera.backgroundColor = new Color(0, 0, 0, 0); // Transparente
 
             if (!Directory.Exists(outputFolder))
                 Directory.CreateDirectory(outputFolder);
@@ -26,8 +26,17 @@ namespace Props
             foreach (GameObject prefab in propsToRender)
             {
                 GameObject instance = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-                instance.transform.localPosition = Vector3.zero;
                 instance.transform.localScale = Vector3.one;
+
+                Renderer renderer = instance.GetComponentInChildren<Renderer>();
+                if (renderer != null)
+                {
+                    Vector3 offset = renderer.bounds.center - spawnPoint.position;
+                    instance.transform.position -= offset;
+
+                    float maxExtent = Mathf.Max(renderer.bounds.extents.x, renderer.bounds.extents.y, renderer.bounds.extents.z);
+                    renderCamera.orthographicSize = maxExtent * 1.5f;
+                }
 
                 renderCamera.Render();
 
