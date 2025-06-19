@@ -14,7 +14,11 @@ namespace PlayerScripts
         [Header("Player Settings")]
         [SerializeField] private KeyCode pushToTalkKey = KeyCode.J;
         private Recorder rec;
-
+        [Header("Player Dependences")]
+        [SerializeField] private GameObject micUIPrefab;
+        [SerializeField] private AudioClip radioSound;
+        private GameObject micUIInstance;
+        private AudioSource audioSource;
 
         private Renderer currentHandObjectRenderer;
         public GameObject CurrentHandObject => currentHandObject;
@@ -32,6 +36,7 @@ namespace PlayerScripts
             GameManager.Instance.RegisterMover(this);
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
             rec = GetComponent<Recorder>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         protected override void Update()
@@ -40,10 +45,13 @@ namespace PlayerScripts
             if (Input.GetKeyDown(pushToTalkKey))
             {
                 rec.TransmitEnabled = true;
+                ShowMicUI();
+                PlayRadioSound();
             }
             else if (Input.GetKeyUp(pushToTalkKey))
             {
                 rec.TransmitEnabled = false;
+                HideMicUI();
             }
         }
 
@@ -96,7 +104,35 @@ namespace PlayerScripts
             currentHandObjectRenderer.material.color = Color.cyan;
             CurrentHandObject.SetActive(false);
         }
-        
+
+        // ──────────────────────────────────────────────────────────────────────────────
+        // UI logic
+        // ──────────────────────────────────────────────────────────────────────────────
+        private void ShowMicUI()
+        {
+            //Consulta para dave, capaz prefiere crear esto en el start para hacer una carga previa,
+            //yo como capaz en micro no se usa prefiero que no exista hasta que no sea necesario
+            //es un tema de tiempos en realidad porque en algun momento se tiene que crear jaja
+            if (micUIInstance == null)
+                micUIInstance = Instantiate(micUIPrefab);
+            micUIInstance.SetActive(true);
+        }
+
+        private void HideMicUI()
+        {
+            if (micUIInstance != null)
+                micUIInstance.SetActive(false);
+        }
+
+        // ──────────────────────────────────────────────────────────────────────────────
+        // Audio Logic
+        // ──────────────────────────────────────────────────────────────────────────────
+        private void PlayRadioSound()
+        {
+            //Aca deberia llamar al audiosource y reproducirle un sonidito asi re loco jajant
+            audioSource.PlayOneShot(radioSound);
+        }
+
         // ──────────────────────────────────────────────────────────────────────────────
         // RPC
         // ──────────────────────────────────────────────────────────────────────────────
@@ -108,7 +144,6 @@ namespace PlayerScripts
             IsCaptured = true;
             Debug.Log($"[MoverController] {photonView.Owner.NickName} has been captured.");
             GameManager.Instance.RegisterCapturedMover();
-
             // TODO Desactivar Inputs
         }
     }
