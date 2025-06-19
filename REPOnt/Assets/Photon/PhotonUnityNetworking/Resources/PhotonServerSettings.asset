@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 2c9079bc-c1fc-4305-bf89-c67547cda772
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: sa
     Server: 
     Port: 0
     ProxyServer: 
@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: cae
+  DevRegion: sa
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -53,5 +53,5 @@ MonoBehaviour:
   - OpenGateRPC
   - CloseGateRPC
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
