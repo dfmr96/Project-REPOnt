@@ -9,20 +9,25 @@ namespace PlayerScripts
 {
     public class MoverController : PlayerBase
     {
-        [Header("Interaction")]
-        [SerializeField] private float interactRange = 3f;
+        [Header("Interaction")] [SerializeField]
+        private float interactRange = 3f;
+
         [SerializeField] GameObject currentHandObject;
-        [Header("Player Settings")]
-        [SerializeField] private KeyCode pushToTalkKey = KeyCode.J;
+
+        [Header("Player Settings")] [SerializeField]
+        private KeyCode pushToTalkKey = KeyCode.J;
+
         private Recorder rec;
-        [Header("Player Dependences")]
-        [SerializeField] private GameObject micUIPrefab;
-        //[SerializeField] private GameObject objUIPrefab;
+
+        [Header("Player Dependences")] [SerializeField]
+        private GameObject micUIPrefab;
+
+        [SerializeField] private GameObject objUIPrefab;
         [SerializeField] private GameObject playerCanvasPrefab;
         [SerializeField] private AudioClip radioSound;
         private GameObject playerCanvas;
         private GameObject micUIInstance;
-        //private GameObject objUIInstance;
+        private GameObject objUIInstance;
         private AudioSource audioSource;
 
         private Renderer currentHandObjectRenderer;
@@ -34,7 +39,7 @@ namespace PlayerScripts
         // ──────────────────────────────────────────────────────────────────────────────
         // Unity Methods
         // ──────────────────────────────────────────────────────────────────────────────
-        
+
         protected override void Start()
         {
             base.Start();
@@ -42,7 +47,10 @@ namespace PlayerScripts
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
             rec = GetComponent<Recorder>();
             audioSource = GetComponent<AudioSource>();
-            if (playerCanvas == null) { playerCanvas = Instantiate(playerCanvasPrefab); }
+            if (playerCanvas == null)
+            {
+                playerCanvas = Instantiate(playerCanvasPrefab);
+            }
         }
 
         protected override void Update()
@@ -83,7 +91,26 @@ namespace PlayerScripts
                 Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
             }
         }
-        
+
+        public void ShowHandObject()
+        {
+            if (CurrentHandObject != null)
+                CurrentHandObject.SetActive(true);
+        }
+
+        public void ShowObjectUI(Sprite objImage, Color objColor)
+        {
+            if (playerCanvas == null) return;
+
+            if (objUIInstance == null)
+                objUIInstance = Instantiate(objUIPrefab, playerCanvas.transform);
+
+            objUIInstance.GetComponent<Image>().sprite = objImage;
+            objUIInstance.GetComponent<Image>().color = objColor;
+            objUIInstance.SetActive(true);
+        }
+
+        //Se quito el uso de este moetod por ambos de arriba TODO Cambiar
         public void PickupObject(PickupObject pickup, Sprite objImage, Color objColor)
         {
             ObjectId = pickup.PropID;
@@ -96,7 +123,7 @@ namespace PlayerScripts
                 //objUIInstance.SetActive(true);
                 //currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
             }
-            
+
             Debug.Log($"[Mover] Picked up object with ID {ObjectId}");
         }
 
@@ -105,8 +132,11 @@ namespace PlayerScripts
             speedMultiplier = Mathf.Clamp(1f - (weight * .05f), .3f, 1f);
         }
 
-        public void ResetSpeed() { speedMultiplier = 1f; }
-        
+        public void ResetSpeed()
+        {
+            speedMultiplier = 1f;
+        }
+
         // ──────────────────────────────────────────────────────────────────────────────
         // State Management
         // ──────────────────────────────────────────────────────────────────────────────
@@ -115,7 +145,7 @@ namespace PlayerScripts
             if (CurrentHandObject.activeSelf) return;
             CurrentHandObject.SetActive(true);
         }
-        
+
         public void DropHandObject()
         {
             currentHandObjectRenderer.material.color = Color.cyan;

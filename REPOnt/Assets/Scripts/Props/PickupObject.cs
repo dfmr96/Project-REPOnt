@@ -23,10 +23,17 @@ namespace Props
                 Debug.LogWarning("MoverController not found on player");
                 return;
             }
-            //Debuffear el personaje con menos velocidad accediendo usando:
-            //PropData.Weight
 
-            mover.PickupObject(this, propData.PropPreview, propData.PropPreviewColor);
+            // Lógica que TODOS deben ver
+            mover.ObjectId = propData.ID;
+            mover.ShowHandObject();
+
+            // Lógica que SOLO el dueño ve (UI)
+            if (mover.GetComponent<PhotonView>().IsMine)
+            {
+                mover.ShowObjectUI(propData.PropPreview, propData.PropPreviewColor);
+            }
+
             mover.ApplyWeightDebuff(propData.Weight);
             gameObject.SetActive(false);
         }
