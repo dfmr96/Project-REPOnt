@@ -31,7 +31,7 @@ namespace Props
             // Lógica que SOLO el dueño ve (UI)
             if (mover.GetComponent<PhotonView>().IsMine)
             {
-                mover.ShowObjectUI(propData.PropPreview, propData.PropPreviewColor);
+                mover.ShowObjectUI(propData.PropPreview);
             }
 
             mover.ApplyWeightDebuff(propData.Weight);

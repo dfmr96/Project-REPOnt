@@ -98,7 +98,7 @@ namespace PlayerScripts
                 CurrentHandObject.SetActive(true);
         }
 
-        public void ShowObjectUI(Sprite objImage, Color objColor)
+        public void ShowObjectUI(Sprite objImage)
         {
             if (playerCanvas == null) return;
 
@@ -106,7 +106,6 @@ namespace PlayerScripts
                 objUIInstance = Instantiate(objUIPrefab, playerCanvas.transform);
 
             objUIInstance.GetComponent<Image>().sprite = objImage;
-            objUIInstance.GetComponent<Image>().color = objColor;
             objUIInstance.SetActive(true);
         }
 
