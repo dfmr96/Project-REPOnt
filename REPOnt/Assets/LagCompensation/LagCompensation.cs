@@ -33,10 +33,10 @@ public class LagCompensation : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            networkPosition = (Vector3) stream.ReceiveNext();
-            rb.velocity = (Vector3) stream.ReceiveNext();
+            networkPosition = (Vector3)stream.ReceiveNext();
+            rb.velocity = (Vector3)stream.ReceiveNext();
 
-            float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
+            float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
             networkPosition += rb.velocity * lag;
         }
     }

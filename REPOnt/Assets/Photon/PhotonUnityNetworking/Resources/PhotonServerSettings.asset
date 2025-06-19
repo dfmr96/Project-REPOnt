@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: 2c9079bc-c1fc-4305-bf89-c67547cda772
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: 2c9079bc-c1fc-4305-bf89-c67547cda772
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -28,26 +28,28 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: sa
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
+  - ChangeColour
   - ClickRpc
   - DestroyRpc
+  - HeresWhy
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - TeleportToLocation
-  - RPC_HandlePickup
-  - RPC_PlaceObject
   - MarkAsCaptured
+  - RespawnSpaceship
   - RPC_ApplyPropAssignment
   - RPC_EndGame
-  - RPC_SetMatchStartTime
-  - RPC_UpdateCapturedPlayers
+  - RPC_HandlePickup
+  - RPC_PlaceObject
   - RPC_StartMatch
+  - RPC_UpdateCapturedPlayers
+  - TeleportToLocation
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0
