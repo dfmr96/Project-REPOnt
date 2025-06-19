@@ -17,4 +17,6 @@ MonoBehaviour:
   weight: 6
   baseColor: {r: 0.6037736, g: 0.259167, b: 0.259167, a: 1}
   dropZoneColor: {r: 0.6039216, g: 0.25882354, b: 0.25882354, a: 0.4}
+  propPreview: {fileID: 21300000, guid: 1c83cb319a5faaf48a8ec476d7060844, type: 3}
+  propPreviewColor: {r: 1, g: 0, b: 0, a: 0.60784316}
   prefab: {fileID: 6806497818985406000, guid: 70cc66176fa8ff346b9f26f3fbe71ca7, type: 3}

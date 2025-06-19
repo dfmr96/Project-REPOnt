@@ -26,7 +26,7 @@ namespace Props
             //Debuffear el personaje con menos velocidad accediendo usando:
             //PropData.Weight
 
-            mover.PickupObject(this);
+            mover.PickupObject(this, propData.PropPreview, propData.PropPreviewColor);
             mover.ApplyWeightDebuff(propData.Weight);
             gameObject.SetActive(false);
         }

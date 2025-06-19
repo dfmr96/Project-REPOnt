@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Voice.Unity;
 using Props;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PlayerScripts
 {
@@ -16,8 +17,12 @@ namespace PlayerScripts
         private Recorder rec;
         [Header("Player Dependences")]
         [SerializeField] private GameObject micUIPrefab;
+        [SerializeField] private GameObject objUIPrefab;
+        [SerializeField] private GameObject playerCanvasPrefab;
         [SerializeField] private AudioClip radioSound;
+        private GameObject playerCanvas;
         private GameObject micUIInstance;
+        private GameObject objUIInstance;
         private AudioSource audioSource;
 
         private Renderer currentHandObjectRenderer;
@@ -37,6 +42,7 @@ namespace PlayerScripts
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
             rec = GetComponent<Recorder>();
             audioSource = GetComponent<AudioSource>();
+            if (playerCanvas == null) { playerCanvas = Instantiate(playerCanvasPrefab); }
         }
 
         protected override void Update()
@@ -78,12 +84,16 @@ namespace PlayerScripts
             }
         }
         
-        public void PickupObject(PickupObject pickup)
+        public void PickupObject(PickupObject pickup, Sprite objImage, Color objColor)
         {
             ObjectId = pickup.PropID;
             if (CurrentHandObject != null)
             {
                 CurrentHandObject.SetActive(true);
+                if (objUIInstance == null) { Instantiate(objUIPrefab, playerCanvas.transform); }
+                objUIInstance.GetComponent<Image>().sprite = objImage;
+                objUIInstance.GetComponent<Image>().color = objColor;
+                objUIInstance.SetActive(true);
                 //currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
             }
             
@@ -110,6 +120,7 @@ namespace PlayerScripts
         {
             currentHandObjectRenderer.material.color = Color.cyan;
             CurrentHandObject.SetActive(false);
+            objUIInstance.SetActive(false);
             ResetSpeed();
         }
 
@@ -118,11 +129,8 @@ namespace PlayerScripts
         // ──────────────────────────────────────────────────────────────────────────────
         private void ShowMicUI()
         {
-            //Consulta para dave, capaz prefiere crear esto en el start para hacer una carga previa,
-            //yo como capaz en micro no se usa prefiero que no exista hasta que no sea necesario
-            //es un tema de tiempos en realidad porque en algun momento se tiene que crear jaja
             if (micUIInstance == null)
-                micUIInstance = Instantiate(micUIPrefab);
+                micUIInstance = Instantiate(micUIPrefab, playerCanvas.transform);
             micUIInstance.SetActive(true);
         }
 

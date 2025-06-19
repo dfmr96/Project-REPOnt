@@ -10,12 +10,16 @@ namespace Props
         [field:SerializeField] private int weight;
         [field:SerializeField] private Color baseColor;
         [field:SerializeField] private Color dropZoneColor;
+        [field:SerializeField] private Sprite propPreview;
+        [field:SerializeField] private Color propPreviewColor;
         [field:SerializeField] private GameObject prefab;
         public string PropName => propName;
         public int ID => id;
         public int Weight => weight;
         public Color BaseColor => baseColor;
         public Color DropZoneColor => dropZoneColor;
+        public Color PropPreviewColor => propPreviewColor;
+        public Sprite PropPreview => propPreview;
         public GameObject Prefab => prefab;
     }
 }

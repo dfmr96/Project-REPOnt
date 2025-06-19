@@ -457,7 +457,9 @@ MonoBehaviour:
   interactRange: 3
   currentHandObject: {fileID: 5908596995860277552}
   pushToTalkKey: 106
-  micUIPrefab: {fileID: 8208863233803983991, guid: ca35938d35f166845a8fc16cb3d50232, type: 3}
+  micUIPrefab: {fileID: 1055434849626965762, guid: bd8e4fc2c4f44f346983d90bf71b1704, type: 3}
+  objUIPrefab: {fileID: 3499231898635998325, guid: da85470b7938d974592b7c8905e30143, type: 3}
+  playerCanvasPrefab: {fileID: 8208863233803983991, guid: ca35938d35f166845a8fc16cb3d50232, type: 3}
   radioSound: {fileID: 8300000, guid: f9841a210cfa24a49aecefea6f053159, type: 3}
 --- !u!114 &1884175841466597778
 MonoBehaviour:
