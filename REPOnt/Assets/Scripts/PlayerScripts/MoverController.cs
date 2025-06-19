@@ -86,9 +86,16 @@ namespace PlayerScripts
                 CurrentHandObject.SetActive(true);
                 //currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
             }
-
+            
             Debug.Log($"[Mover] Picked up object with ID {ObjectId}");
         }
+
+        public void ApplyWeightDebuff(float weight)
+        {
+            speedMultiplier = Mathf.Clamp(1f - (weight * .05f), .3f, 1f);
+        }
+
+        public void ResetSpeed() { speedMultiplier = 1f; }
         
         // ──────────────────────────────────────────────────────────────────────────────
         // State Management
@@ -103,6 +110,7 @@ namespace PlayerScripts
         {
             currentHandObjectRenderer.material.color = Color.cyan;
             CurrentHandObject.SetActive(false);
+            ResetSpeed();
         }
 
         // ──────────────────────────────────────────────────────────────────────────────

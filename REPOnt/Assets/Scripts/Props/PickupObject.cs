@@ -23,9 +23,11 @@ namespace Props
                 Debug.LogWarning("MoverController not found on player");
                 return;
             }
-            
-            mover.PickupObject(this);
+            //Debuffear el personaje con menos velocidad accediendo usando:
+            //PropData.Weight
 
+            mover.PickupObject(this);
+            mover.ApplyWeightDebuff(propData.Weight);
             gameObject.SetActive(false);
         }
     }

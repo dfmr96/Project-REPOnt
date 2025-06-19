@@ -9,6 +9,7 @@ public abstract class PlayerBase : MonoBehaviour
     [SerializeField] private PlayerData data;
     [SerializeField] private KeyCode interactKey = KeyCode.E;
     protected float interactTimer = 0f;
+    protected float speedMultiplier = 1f;
     
     [Header("Camera")]
     [SerializeField] private Camera playerCamera;
@@ -55,7 +56,7 @@ public abstract class PlayerBase : MonoBehaviour
         float v = Input.GetAxis("Vertical");
         Vector3 inputDir = new Vector3(h, 0f, v);
 
-        Vector3 movement = inputDir * (data.NormalSpeed * Time.deltaTime);
+        Vector3 movement = inputDir * (data.NormalSpeed * speedMultiplier * Time.deltaTime);
         transform.Translate(movement, Space.Self);
     }
 
