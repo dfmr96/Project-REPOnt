@@ -57,6 +57,7 @@ namespace PlayerScripts
         protected override void Update()
         {
             base.Update();
+            if (!photonView.IsMine) return;
             if (Input.GetKeyDown(pushToTalkKey))
             {
                 rec.TransmitEnabled = true;

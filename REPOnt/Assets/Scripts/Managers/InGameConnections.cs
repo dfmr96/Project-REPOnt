@@ -64,10 +64,9 @@ public class InGameConnections : MonoBehaviourPunCallbacks
         {
             UIManager.Instance.AddLogMessage("El Ghost se desconectó. Esperando reconexión...", Color.red);
             Time.timeScale = 0f;
-            //Mostrar UI que avise que se esta esperando al ghost
-            StartCoroutine(WaitForGhostReconnect(15f));
+            StartCoroutine(WaitForGhostReconnect(10f));
         }
-        else UIManager.Instance.AddLogMessage($"El jugador {otherPlayer.NickName} se desconectó.", Color.red);
+        else UIManager.Instance.AddLogMessage($"El jugador {otherPlayer.NickName} se desconectó.", Color.yellow);
     }
 
     private IEnumerator TryToReconnect()
@@ -103,9 +102,7 @@ public class InGameConnections : MonoBehaviourPunCallbacks
 
     private IEnumerator WaitForGhostReconnect(float timeout)
     {
-        float timer = 0f;
-
-        while (timer < timeout)
+        for (float i = 0; i < timeout; i += Time.unscaledDeltaTime)
         {
             var ghostPlayer = Array.Find(PhotonNetwork.PlayerList, p =>
                 p.CustomProperties.TryGetValue("Role", out object role) && role.ToString() == "Ghost");
@@ -116,8 +113,6 @@ public class InGameConnections : MonoBehaviourPunCallbacks
                 Time.timeScale = 1f;
                 yield break;
             }
-
-            timer += Time.deltaTime;
             yield return null;
         }
 

@@ -104,4 +104,10 @@ public class UIManager : MonoBehaviour
         PhotonNetwork.Disconnect();
         Application.Quit();
     }
+
+    [ContextMenu("Add Log")]
+    void AddLog()
+    {
+        AddLogMessage("This is a long text for testing wrapping in scroll view!", Color.yellow);
+    }
 }
