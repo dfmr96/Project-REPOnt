@@ -16,6 +16,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     private const string RoleKey = "Role";
     private const string GhostRole = "Ghost";
     private const string MoverRole = "Mover";
+    public static string lastRoomId;
     
     // ──────────────────────────────────────────────────────────────────────────────
     // Unity Methods
@@ -30,7 +31,12 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
         Instance = this;
     }
-    private void Start() { ConnectToPhoton(); }
+
+    private void Start()
+    {
+        Application.runInBackground = true;
+        ConnectToPhoton();
+    }
     
     // ──────────────────────────────────────────────────────────────────────────────
     // Pun Callbacks
@@ -71,21 +77,31 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // ──────────────────────────────────────────────────────────────────────────────
     public void ConnectToPhoton()
     {
-        if (PhotonNetwork.IsConnected)
-            PhotonNetwork.Disconnect();
-        PhotonNetwork.ConnectUsingSettings();
+        if (!PhotonNetwork.IsConnected)
+        {
+            string uniqueId = SystemInfo.deviceUniqueIdentifier + "_" + UnityEngine.Random.Range(1000, 9999);
+            PhotonNetwork.AuthValues = new AuthenticationValues(uniqueId);
+            PhotonNetwork.AuthValues.UserId = uniqueId;
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     public void CreateRoom()
     {
         if (!PhotonNetwork.IsConnected) return;
-        PhotonNetwork.CreateRoom(GenerateId());
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.PlayerTtl = 30000; // 30 seconds
+        roomOptions.EmptyRoomTtl = 30000; // 30 seconds
+        string roomId = GenerateId();
+        PhotonNetwork.CreateRoom(roomId, roomOptions);
+        lastRoomId = roomId;
     }
 
     public void JoinRoom(string roomId)
     {
         if (!PhotonNetwork.IsConnected) return;
         PhotonNetwork.JoinRoom(roomId);
+        lastRoomId = roomId;
     }
     public string GetRoomId() {  return PhotonNetwork.CurrentRoom.Name; }
     public int GetPlayersQuantity() { return PhotonNetwork.PlayerList.Length; }
