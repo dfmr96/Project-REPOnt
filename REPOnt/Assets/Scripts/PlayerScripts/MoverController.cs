@@ -16,6 +16,7 @@ namespace PlayerScripts
 
         [Header("Player Settings")] [SerializeField]
         private KeyCode pushToTalkKey = KeyCode.J;
+        private KeyCode test = KeyCode.U;
 
         private Recorder rec;
 

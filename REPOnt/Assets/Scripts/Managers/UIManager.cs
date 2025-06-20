@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,6 +19,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text pingText;
 
+    [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private GameObject logEntryPrefab;
+    [SerializeField] private Transform logContentParent;
+
     [SerializeField] private float warningTimeThreshold = 30f;
 
     private float pingUpdateTimer = 0f;
@@ -33,7 +36,9 @@ public class UIManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         Instance = this;
+        ClearLog();
     }
+
     void Update()
     {
         pingUpdateTimer += Time.deltaTime;
@@ -74,6 +79,22 @@ public class UIManager : MonoBehaviour
         Instantiate(isMovers ? moversPrefab : ghostPrefab, canvasTransform);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public void AddLogMessage(string message, Color logColor)
+    {
+        GameObject entry = Instantiate(logEntryPrefab, logContentParent);
+        TextMeshProUGUI entryText = entry.GetComponentInChildren<TextMeshProUGUI>();
+
+        entryText.text = message;
+        entryText.color = logColor;
+        scrollRect.verticalNormalizedPosition = 0f;
+    }
+
+    public void ClearLog()
+    {
+        foreach (Transform child in logContentParent)
+            Destroy(child.gameObject);
     }
 
     public void BackToMainMenu() { PhotonNetwork.Disconnect(); }
