@@ -16,7 +16,7 @@ namespace PlayerScripts
 
         [Header("Player Settings")] [SerializeField]
         private KeyCode pushToTalkKey = KeyCode.J;
-        private KeyCode test = KeyCode.U;
+        private KeyCode dropObjectKey = KeyCode.Q;
 
         private Recorder rec;
 
@@ -30,6 +30,7 @@ namespace PlayerScripts
         private GameObject micUIInstance;
         private GameObject objUIInstance;
         private AudioSource audioSource;
+        private PickupObject pickupObject = null;
 
         private Renderer currentHandObjectRenderer;
         public GameObject CurrentHandObject => currentHandObject;
@@ -68,6 +69,13 @@ namespace PlayerScripts
             {
                 rec.TransmitEnabled = false;
                 HideMicUI();
+            }
+            if (Input.GetKeyDown(dropObjectKey))
+            {
+                if (pickupObject != null)
+                {
+                    pickupObject.Drop(photonView);
+                }
             }
         }
 
@@ -111,21 +119,10 @@ namespace PlayerScripts
             objUIInstance.SetActive(true);
         }
 
-        //Se quito el uso de este moetod por ambos de arriba TODO Cambiar
-        public void PickupObject(PickupObject pickup, Sprite objImage, Color objColor)
+        public void HideObjectUI()
         {
-            ObjectId = pickup.PropID;
-            if (CurrentHandObject != null)
-            {
-                CurrentHandObject.SetActive(true);
-                //if (objUIInstance == null) { Instantiate(objUIPrefab, playerCanvas.transform); }
-                //objUIInstance.GetComponent<Image>().sprite = objImage;
-                //objUIInstance.GetComponent<Image>().color = objColor;
-                //objUIInstance.SetActive(true);
-                //currentHandObjectRenderer.material.color = pickup.PropData.BaseColor;
-            }
-
-            Debug.Log($"[Mover] Picked up object with ID {ObjectId}");
+            if (playerCanvas == null) return;
+            objUIInstance.SetActive(false);
         }
 
         public void ApplyWeightDebuff(float weight)
@@ -133,10 +130,9 @@ namespace PlayerScripts
             speedMultiplier = Mathf.Clamp(1f - (weight * .05f), .3f, 1f);
         }
 
-        public void ResetSpeed()
-        {
-            speedMultiplier = 1f;
-        }
+        public void ResetSpeed() { speedMultiplier = 1f; }
+
+        public void GetPickUpObject(PickupObject obj) { pickupObject = obj; }
 
         // ──────────────────────────────────────────────────────────────────────────────
         // State Management
@@ -151,7 +147,7 @@ namespace PlayerScripts
         {
             currentHandObjectRenderer.material.color = Color.cyan;
             CurrentHandObject.SetActive(false);
-            //objUIInstance.SetActive(false);
+            ObjectId = -1;
             ResetSpeed();
         }
 
@@ -174,11 +170,7 @@ namespace PlayerScripts
         // ──────────────────────────────────────────────────────────────────────────────
         // Audio Logic
         // ──────────────────────────────────────────────────────────────────────────────
-        private void PlayRadioSound()
-        {
-            //Aca deberia llamar al audiosource y reproducirle un sonidito asi re loco jajant
-            audioSource.PlayOneShot(radioSound);
-        }
+        private void PlayRadioSound() { audioSource.PlayOneShot(radioSound); }
 
         // ──────────────────────────────────────────────────────────────────────────────
         // RPC
@@ -189,9 +181,7 @@ namespace PlayerScripts
             if (IsCaptured) return;
 
             IsCaptured = true;
-            Debug.Log($"[MoverController] {photonView.Owner.NickName} has been captured.");
             GameManager.Instance.RegisterCapturedMover();
-            // TODO Desactivar Inputs
         }
     }
 }
