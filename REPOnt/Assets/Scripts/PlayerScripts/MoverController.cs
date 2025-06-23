@@ -181,6 +181,7 @@ namespace PlayerScripts
             if (IsCaptured) return;
 
             IsCaptured = true;
+            if (pickupObject != null) pickupObject.Drop(photonView);
             GameManager.Instance.RegisterCapturedMover();
         }
     }

@@ -8,6 +8,7 @@ namespace Props
 {
     public class PickupObject : PropBehaviourBase, IInteractable
     {
+        [SerializeField] private LayerMask groundLayer;
         private Vector3 rotationVel = new Vector3(0, 25, 0);
         private void Update() { transform.Rotate(rotationVel * Time.deltaTime); }
         protected override Color GetAssignedColor() => propData.BaseColor;
@@ -54,7 +55,15 @@ namespace Props
             mover.DropHandObject();
             mover.ResetSpeed();
             gameObject.SetActive(true);
-            gameObject.transform.position = mover.transform.position;
+
+            Vector3 dropOrigin = mover.transform.position + (mover.transform.forward * 2f) + Vector3.up * 2f;
+            Vector3 dropDirection = Vector3.down;
+
+            Debug.DrawRay(dropOrigin, dropDirection * 10f, Color.red, 5f);
+
+            if (Physics.Raycast(dropOrigin, dropDirection, out RaycastHit hit, 10f))
+                gameObject.transform.position = hit.point;
+            else gameObject.transform.position = dropOrigin + Vector3.down * 2f;
         }
     }
 }

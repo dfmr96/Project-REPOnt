@@ -1080,6 +1080,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &55843041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11501,6 +11504,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 32.64
       objectReference: {fileID: 0}
+    - target: {fileID: -1695386897620489773, guid: 532a182feeb0e0549bbda9b69e972719, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 911181952841659970, guid: 532a182feeb0e0549bbda9b69e972719, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 532a182feeb0e0549bbda9b69e972719, type: 3}
       propertyPath: m_Name
       value: Mansion&Outsides
@@ -11508,6 +11519,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 532a182feeb0e0549bbda9b69e972719, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550463727306718371, guid: 532a182feeb0e0549bbda9b69e972719, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7879686411147973936, guid: 532a182feeb0e0549bbda9b69e972719, type: 3}
       propertyPath: m_IsActive
@@ -13832,6 +13847,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &1333591978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16067,6 +16085,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propData: {fileID: 0}
   rend: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &1602986874
 MonoBehaviour:
   m_ObjectHideFlags: 0
