@@ -77,13 +77,12 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // ──────────────────────────────────────────────────────────────────────────────
     public void ConnectToPhoton()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            string uniqueId = SystemInfo.deviceUniqueIdentifier + "_" + UnityEngine.Random.Range(1000, 9999);
-            PhotonNetwork.AuthValues = new AuthenticationValues(uniqueId);
-            PhotonNetwork.AuthValues.UserId = uniqueId;
-            PhotonNetwork.ConnectUsingSettings();
-        }
+        if (PhotonNetwork.IsConnected)
+            PhotonNetwork.Disconnect();
+        string uniqueId = SystemInfo.deviceUniqueIdentifier + "_" + UnityEngine.Random.Range(1000, 9999);
+        PhotonNetwork.AuthValues = new AuthenticationValues(uniqueId);
+        PhotonNetwork.AuthValues.UserId = uniqueId;
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     public void CreateRoom()
