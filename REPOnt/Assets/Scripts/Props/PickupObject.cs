@@ -20,7 +20,11 @@ namespace Props
         {
             photonView.RPC(nameof(RPC_HandleDrop), RpcTarget.AllBuffered, actorView.ViewID);
         }
-        
+        public void ReturnObject(PhotonView actorView)
+        {
+            photonView.RPC(nameof(RPC_BackToOrigin), RpcTarget.AllBuffered, actorView.ViewID);
+        }
+
         [PunRPC]
         public void RPC_HandlePickup(int playerViewID)
         {
@@ -59,11 +63,22 @@ namespace Props
             Vector3 dropOrigin = mover.transform.position + (mover.transform.forward * 2f) + Vector3.up * 2f;
             Vector3 dropDirection = Vector3.down;
 
-            Debug.DrawRay(dropOrigin, dropDirection * 10f, Color.red, 5f);
+            Debug.DrawRay(dropOrigin, dropDirection * 20f, Color.red, 5f);
 
-            if (Physics.Raycast(dropOrigin, dropDirection, out RaycastHit hit, 10f))
+            if (Physics.Raycast(dropOrigin, dropDirection, out RaycastHit hit, 20f))
                 gameObject.transform.position = hit.point;
             else gameObject.transform.position = dropOrigin + Vector3.down * 2f;
+        }
+
+        [PunRPC]
+        public void RPC_BackToOrigin(int playerViewID)
+        {
+            var mover = GameManager.Instance.GetMoverByViewID(playerViewID);
+            if (mover == null) return;
+            if (mover.GetComponent<PhotonView>().IsMine) { mover.HideObjectUI(); }
+            mover.DropHandObject();
+            mover.ResetSpeed();
+            gameObject.SetActive(true);
         }
     }
 }
