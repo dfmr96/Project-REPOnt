@@ -5,6 +5,7 @@ using Props;
 using UnityEngine;
 using Photon.Pun;
 using Unity.Collections;
+using UnityEditor.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -109,19 +110,30 @@ public class GameManager : MonoBehaviour
         Debug.Log("All movers have been captured!");
         EndGame(false);
     }
-    private bool AreAllMoversCaptured()
-    {
-        int requiredToCapture = Mathf.CeilToInt(movers.Count / 2f);
-        int actualCaptured = 0;
 
+    public void UpdateMoversCaptured()
+    {
+        photonView.RPC(nameof(RPC_UpdateCapturedPlayers), RpcTarget.All);
+    }
+    
+    private int GetMoversCapturedCount()
+    {
+        int count = 0;
         foreach (var mover in movers)
         {
             if (mover.IsCaptured)
-                actualCaptured++;
+                count++;
         }
-        
-        return actualCaptured >= requiredToCapture;
+        capturedMovers = count;
+        return count;
     }
+    private bool AreAllMoversCaptured()
+    {
+        int requiredToCapture = Mathf.CeilToInt(movers.Count / 2f);
+        
+        return GetMoversCapturedCount() >= requiredToCapture;
+    }
+    
     private void CheckDropCompletion()
     {
         if (!HasPropsToWinReached()) return;
@@ -149,8 +161,13 @@ public class GameManager : MonoBehaviour
         photonView.RPC(nameof(RPC_UpdateCapturedPlayers), RpcTarget.All);
         UIManager.Instance.UpdatePropProgress(propsPlaced, propsToWin);
     }
+
     [PunRPC]
-    private void RPC_UpdateCapturedPlayers() { UIManager.Instance.UpdateCapturedMovers(capturedMovers, PhotonNetwork.PlayerList.Length - 1); }
+    private void RPC_UpdateCapturedPlayers()
+    {
+        Debug.Log($"[GameManager] RPC_UpdateCapturedPlayers called. Captured Movers: {GetMoversCapturedCount()}");
+        UIManager.Instance.UpdateCapturedMovers(GetMoversCapturedCount(), PhotonNetwork.PlayerList.Length - 1);
+    }
 
     // ──────────────────────────────────────────────────────────────────────────────
     // Helper Methods

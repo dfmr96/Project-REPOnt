@@ -1,3 +1,4 @@
+using System;
 using Interfaces;
 using Photon.Pun;
 using Photon.Voice.Unity;
@@ -76,6 +77,15 @@ namespace PlayerScripts
                 {
                     pickupObject.Drop(photonView);
                 }
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Prison"))
+            {
+                Debug.Log("Exited prison area, resetting capture state.");
+                IsCaptured = false;
+                GameManager.Instance.UpdateMoversCaptured();
             }
         }
 

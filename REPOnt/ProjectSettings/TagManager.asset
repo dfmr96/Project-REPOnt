@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Mover
   - Ghost
+  - Bullet
+  - Prison
   layers:
   - Default
   - TransparentFX

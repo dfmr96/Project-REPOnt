@@ -9,7 +9,6 @@ namespace RescueGate
     public class GateButton : MonoBehaviour, IInteractable
     {
         [SerializeField] private GateController gateController;
-        private bool hasBeenUsed = false;
 
         private void Start()
         {
