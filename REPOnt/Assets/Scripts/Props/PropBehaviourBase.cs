@@ -7,8 +7,10 @@ namespace Props
     {
         [SerializeField] protected PropData propData;
         [SerializeField] protected Renderer rend;
+        
         //[SerializeField] protected Transform bodyTransform;
-
+        protected GameObject newProp;
+        
         public PropData PropData => propData;
         public int PropID => propData.ID;
 
@@ -33,7 +35,7 @@ namespace Props
 
         protected virtual void InstantiateProp()
         {
-            GameObject newProp = Instantiate(propData.Prefab, transform.position, transform.rotation);
+            newProp = Instantiate(propData.Prefab, transform.position, transform.rotation);
             newProp.transform.SetParent(transform);
             Collider childCollider = newProp.GetComponentInChildren<Collider>();
             if (childCollider != null)
