@@ -50,8 +50,8 @@ namespace PlayerScripts
                 if (hit.collider.CompareTag("Mover") && hit.collider.TryGetComponent(out PhotonView targetPV))
                 {
                     Debug.Log($"[Ghost] Capturing mover: {targetPV.name}");
-                    targetPV.RPC("TeleportToLocation", targetPV.Owner, teleportTarget.position);
                     targetPV.RPC("MarkAsCaptured", RpcTarget.AllBuffered);
+                    targetPV.RPC(nameof(TeleportToLocation), targetPV.Owner, teleportTarget.position);
                 }
             }
         }
