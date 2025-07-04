@@ -144,6 +144,11 @@ public class GameManager : MonoBehaviour
     private void EndGame(bool isMoverWinner)
     {
         photonView.RPC(nameof(RPC_EndGame), RpcTarget.All, isMoverWinner);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            string team = isMoverWinner ? "Mover" : "Ghost";
+            GameAnalyticsHandler.TrackMatchResult(team);
+        }
     }
     private bool HasPropsToWinReached() { return propsPlaced >= PropsToWin; }
 
