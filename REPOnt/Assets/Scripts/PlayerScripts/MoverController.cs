@@ -5,7 +5,6 @@ using Photon.Voice.Unity;
 using Props;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 namespace PlayerScripts
 {
