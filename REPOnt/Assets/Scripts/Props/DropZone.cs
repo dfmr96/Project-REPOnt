@@ -39,7 +39,7 @@ namespace Props
             isPlaced = true;
             //rend.material.color = placedColor;
             GameManager.Instance.RegisterPropPlaced();
-            GameAnalyticsHandler.TrackObjectPlaced(playerViewID);
+            //GameAnalyticsHandler.TrackObjectPlaced();
         }
     }
 }
