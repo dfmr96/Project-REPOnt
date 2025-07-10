@@ -5,6 +5,7 @@ using Photon.Voice.Unity;
 using Props;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace PlayerScripts
 {
@@ -193,6 +194,7 @@ namespace PlayerScripts
             if (IsCaptured) return;
             IsCaptured = true;
             if (pickupObject != null) pickupObject.ReturnObject(photonView);
+            GameAnalyticsHandler.TrackCapturedPlayers(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
             GameManager.Instance.RegisterCapturedMover();
         }
 

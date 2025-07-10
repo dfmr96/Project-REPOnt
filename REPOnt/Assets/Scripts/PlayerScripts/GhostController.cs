@@ -60,7 +60,7 @@ namespace PlayerScripts
                     targetPV.RPC("MarkAsCaptured", RpcTarget.AllBuffered);
                     targetPV.RPC(nameof(TeleportToLocation), targetPV.Owner, teleportTarget.position);
 
-                    photonView.RPC(nameof(RPC_HandleMoverCapture), RpcTarget.All, targetPV);
+                    //photonView.RPC(nameof(RPC_HandleMoverCapture), RpcTarget.All, targetPV);
                 }
             }
         }
