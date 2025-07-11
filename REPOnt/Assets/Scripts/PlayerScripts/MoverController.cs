@@ -76,7 +76,7 @@ namespace PlayerScripts
                 if (pickupObject != null)
                 {
                     pickupObject.Drop(photonView);
-                    photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.All);
+                    photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.MasterClient);
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace PlayerScripts
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
                     interactable.Interact(photonView, ObjectId);
-                    photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.All);
+                    photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.MasterClient);
                 }
             }
             else

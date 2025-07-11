@@ -74,7 +74,7 @@ namespace PlayerScripts
 
                 if (afkTimer >= afkTimeThreshold)
                 {
-                    photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.All);
+                    photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.MasterClient);
                     afkTimer = 0f;
                 }
             }
@@ -95,12 +95,12 @@ namespace PlayerScripts
             GameAnalyticsHandler.TrackGhostAFK(afkTimer, transform.position, PhotonNetwork.CurrentRoom.Name);
         }
 
-        [PunRPC]
-        private void RPC_HandleMoverCapture(PhotonView targetPV)
-        {
-            if (!PhotonNetwork.IsMasterClient) return;
-            GameAnalyticsHandler.TrackCapturedPlayers(targetPV.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
-        }
+        //[PunRPC]
+        //private void RPC_HandleMoverCapture(PhotonView targetPV)
+        //{
+        //    if (!PhotonNetwork.IsMasterClient) return;
+        //    GameAnalyticsHandler.TrackCapturedPlayers(targetPV.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
+        //}
 
 
         // ──────────────────────────────────────────────────────────────────────────────
