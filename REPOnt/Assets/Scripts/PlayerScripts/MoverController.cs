@@ -76,7 +76,7 @@ namespace PlayerScripts
                 if (pickupObject != null)
                 {
                     pickupObject.Drop(photonView);
-                    photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.MasterClient);
+                    photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.All, pickupObject.PropID);
                 }
             }
         }
@@ -84,9 +84,11 @@ namespace PlayerScripts
         {
             if (other.CompareTag("Prison"))
             {
-                Debug.Log("Exited prison area, resetting capture state.");
+                if (!IsCaptured) return;
                 IsCaptured = false;
                 GameManager.Instance.UpdateMoversCaptured();
+                if (!photonView.IsMine) return;
+                photonView.RPC(nameof(RPC_UnmarkAsCaptured), RpcTarget.All);
             }
         }
 
@@ -105,7 +107,7 @@ namespace PlayerScripts
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
                     interactable.Interact(photonView, ObjectId);
-                    photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.MasterClient);
+                    //photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.All);
                 }
             }
             else
@@ -193,22 +195,23 @@ namespace PlayerScripts
             if (IsCaptured) return;
             IsCaptured = true;
             if (pickupObject != null) pickupObject.ReturnObject(photonView);
-            GameAnalyticsHandler.TrackCapturedPlayers(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
             GameManager.Instance.RegisterCapturedMover();
+            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
+            GameAnalyticsHandler.TrackCapturedPlayers(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
         }
 
         [PunRPC]
-        public void RPC_HandleDropObject()
+        public void RPC_UnmarkAsCaptured()
         {
-            if (!PhotonNetwork.IsMasterClient) return;
-            GameAnalyticsHandler.TrackObjectDropped(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
+            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
+            GameAnalyticsHandler.TrackUnCapturedPlayers(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
         }
 
         [PunRPC]
-        private void RPC_HandlePlaceObect()
+        public void RPC_HandleDropObject(int objId)
         {
-            if (!PhotonNetwork.IsMasterClient) return;
-            GameAnalyticsHandler.TrackObjectPlaced(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
+            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
+            GameAnalyticsHandler.TrackObjectDropped(photonView.Owner.ActorNumber, objId, PhotonNetwork.CurrentRoom.Name);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Interfaces;
 using Photon.Pun;
 using PlayerScripts;
@@ -18,6 +17,7 @@ namespace Props
         {
             if (isPlaced || objectId != propData.ID) return;
             photonView.RPC(nameof(RPC_PlaceObject), RpcTarget.AllBuffered, playerPhotonView.ViewID);
+            photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.All, playerPhotonView.Owner.ActorNumber);
         }
 
         public override void SetPropData(PropData data)
@@ -39,7 +39,13 @@ namespace Props
             isPlaced = true;
             //rend.material.color = placedColor;
             GameManager.Instance.RegisterPropPlaced();
-            //GameAnalyticsHandler.TrackObjectPlaced();
+        }
+
+        [PunRPC]
+        private void RPC_HandlePlaceObect(int playerViewID)
+        {
+            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
+            GameAnalyticsHandler.TrackObjectPlaced(playerViewID, PhotonNetwork.CurrentRoom.Name);
         }
     }
 }

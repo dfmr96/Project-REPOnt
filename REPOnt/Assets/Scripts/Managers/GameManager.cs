@@ -5,8 +5,6 @@ using Props;
 using UnityEngine;
 using Photon.Pun;
 using Unity.Collections;
-using UnityEditor.Rendering;
-using System.Xml.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +29,7 @@ public class GameManager : MonoBehaviour
     private PhotonView photonView;
     private readonly List<MoverController> movers = new();
     private bool matchStarted = false;
+    private bool gameEnded = false;
 
     //Properties
     private float TimeRemaining => Mathf.Max(0f, matchDurationSeconds - (float)(PhotonNetwork.Time - matchStartTime));
@@ -141,7 +140,10 @@ public class GameManager : MonoBehaviour
 
     private void EndGame(bool isMoverWinner)
     {
+        if (gameEnded) return;
+        gameEnded = true;
         photonView.RPC(nameof(RPC_EndGame), RpcTarget.All, isMoverWinner);
+        if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
         photonView.RPC(nameof(RPC_HandleAnalytics), RpcTarget.All, isMoverWinner);
     }
     private bool HasPropsToWinReached() { return propsPlaced >= PropsToWin; }
@@ -170,7 +172,7 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     private void RPC_HandleAnalytics(bool isMoverWinner)
     {
-        if (PhotonNetwork.IsMasterClient) return;
+        if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
         string team = isMoverWinner ? "Mover" : "Ghost";
         float matchDuration = (float)(PhotonNetwork.Time - matchStartTime);
 

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -58,7 +59,7 @@ namespace PlayerScripts
             {
                 if (hit.collider.CompareTag("Mover") && hit.collider.TryGetComponent(out PhotonView targetPV))
                 {
-                    targetPV.RPC("MarkAsCaptured", RpcTarget.AllBuffered);
+                    targetPV.RPC("MarkAsCaptured", RpcTarget.All);
                     targetPV.RPC(nameof(TeleportToLocation), targetPV.Owner, teleportTarget.position);
 
                     //photonView.RPC(nameof(RPC_HandleMoverCapture), RpcTarget.All, targetPV);
@@ -75,7 +76,7 @@ namespace PlayerScripts
 
                 if (afkTimer >= afkTimeThreshold)
                 {
-                    photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.MasterClient);
+                    photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.All);
                     afkTimer = 0f;
                 }
             }
@@ -92,7 +93,7 @@ namespace PlayerScripts
         [PunRPC]
         private void RPC_HandleGhostAFK()
         {
-            if (!PhotonNetwork.IsMasterClient) return;
+            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
             GameAnalyticsHandler.TrackGhostAFK(afkTimer, transform.position, PhotonNetwork.CurrentRoom.Name);
         }
 

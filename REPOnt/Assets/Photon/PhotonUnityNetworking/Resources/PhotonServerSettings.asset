@@ -59,6 +59,7 @@ MonoBehaviour:
   - RPC_HandleGhostAFK
   - RPC_HandleMoverCapture
   - RPC_HandlePlaceObect
+  - RPC_UnmarkAsCaptured
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
