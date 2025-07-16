@@ -9,6 +9,7 @@ namespace PlayerScripts
         [Header("Interaction")] 
         [SerializeField] private float interactionRange = 5f;
         [SerializeField] private Transform teleportTarget;
+        [SerializeField] private Transform raycast;
 
         [Header("Analytics Tracker")]
         [SerializeField] private float afkDistanceThreshold = 1f;
@@ -39,7 +40,7 @@ namespace PlayerScripts
             TrackAFKGhost();
 
 #if UNITY_EDITOR
-            DebugHighlightMover(transform.position, transform.forward);
+            DebugHighlightMover(raycast.position, transform.forward);
 #endif
             base.Update();
         }
@@ -50,7 +51,7 @@ namespace PlayerScripts
 
         protected override void Interact()
         {
-            Vector3 origin = transform.position;
+            Vector3 origin = raycast.position;
             Vector3 direction = transform.forward;
 
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactionRange))

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 574802027141045957}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.437, z: 0.406}
+  m_LocalPosition: {x: -0, y: -0.502, z: 0.406}
   m_LocalScale: {x: 0.61, y: 0.37, z: 0.41}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -404,6 +404,7 @@ MonoBehaviour:
   postProcessVolume: {fileID: 2705060616062010546}
   interactionRange: 5
   teleportTarget: {fileID: 0}
+  raycast: {fileID: 3760479331670542806}
   afkDistanceThreshold: 1
   afkTimeThreshold: 10
   debugHighlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
