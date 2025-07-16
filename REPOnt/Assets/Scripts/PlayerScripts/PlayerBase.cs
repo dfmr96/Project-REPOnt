@@ -1,6 +1,7 @@
 using Photon.Pun;
 using PlayerScripts;
 using UnityEngine;
+using UnityEngine.Rendering;
 [RequireComponent(typeof(PhotonView))]
 public abstract class PlayerBase : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public abstract class PlayerBase : MonoBehaviour
     
     [Header("Camera")]
     [SerializeField] private Camera playerCamera;
+
+    [Header("PostProcess")]
+    [SerializeField] private Volume postProcessVolume;
     
     // Internal references
     protected PhotonView photonView;
@@ -29,7 +33,9 @@ public abstract class PlayerBase : MonoBehaviour
         if (!photonView.IsMine)
         {
             DisableCamera();
+            postProcessVolume.enabled = false;
         }
+        else postProcessVolume.enabled = true;
     }
     protected virtual void Update()
     {

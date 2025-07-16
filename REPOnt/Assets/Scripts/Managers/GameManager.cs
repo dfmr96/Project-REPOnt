@@ -6,6 +6,7 @@ using UnityEngine;
 using Photon.Pun;
 using Unity.Collections;
 using UnityEditor.Rendering;
+using System.Xml.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -83,7 +84,6 @@ public class GameManager : MonoBehaviour
     {
         propsPlaced++;
         UIManager.Instance.UpdatePropProgress(propsPlaced, propsToWin);
-        Debug.Log($"[GameManager] RegisterPropPlaced called. {propsPlaced}/{PropsToWin}");
         CheckDropCompletion();
     }
     public void RegisterPickupObject(PickupObject pickupObject)
@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
     private void CheckMoversCaptured()
     {
         if (!AreAllMoversCaptured()) return;
-        Debug.Log("All movers have been captured!");
         EndGame(false);
     }
 
@@ -137,13 +136,13 @@ public class GameManager : MonoBehaviour
     private void CheckDropCompletion()
     {
         if (!HasPropsToWinReached()) return;
-        Debug.Log("All objects have been placed! Movers win!");
         EndGame(true);
     }
 
     private void EndGame(bool isMoverWinner)
     {
         photonView.RPC(nameof(RPC_EndGame), RpcTarget.All, isMoverWinner);
+        photonView.RPC(nameof(RPC_HandleAnalytics), RpcTarget.All, isMoverWinner);
     }
     private bool HasPropsToWinReached() { return propsPlaced >= PropsToWin; }
 
@@ -165,8 +164,18 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     private void RPC_UpdateCapturedPlayers()
     {
-        Debug.Log($"[GameManager] RPC_UpdateCapturedPlayers called. Captured Movers: {GetMoversCapturedCount()}");
         UIManager.Instance.UpdateCapturedMovers(GetMoversCapturedCount(), PhotonNetwork.PlayerList.Length - 1);
+    }
+
+    [PunRPC]
+    private void RPC_HandleAnalytics(bool isMoverWinner)
+    {
+        if (PhotonNetwork.IsMasterClient) return;
+        string team = isMoverWinner ? "Mover" : "Ghost";
+        float matchDuration = (float)(PhotonNetwork.Time - matchStartTime);
+
+        GameAnalyticsHandler.TrackMatchDuration(matchDuration, PhotonNetwork.CurrentRoom.Name);
+        GameAnalyticsHandler.TrackMatchResult(team, PhotonNetwork.CurrentRoom.Name);
     }
 
     // ──────────────────────────────────────────────────────────────────────────────

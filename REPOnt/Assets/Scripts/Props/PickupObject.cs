@@ -29,21 +29,14 @@ namespace Props
         public void RPC_HandlePickup(int playerViewID)
         {
             var mover = GameManager.Instance.GetMoverByViewID(playerViewID);
-            if (mover == null)
-            {
-                Debug.LogWarning("MoverController not found on player");
-                return;
-            }
+            if (mover == null) return;
 
             // Lógica que TODOS deben ver
             mover.ObjectId = propData.ID;
             mover.ShowHandObject();
 
             // Lógica que SOLO el dueño ve (UI)
-            if (mover.GetComponent<PhotonView>().IsMine)
-            {
-                mover.ShowObjectUI(propData.PropPreview);
-            }
+            if (mover.GetComponent<PhotonView>().IsMine) mover.ShowObjectUI(propData.PropPreview);
 
             mover.ApplyWeightDebuff(propData.Weight);
             mover.GetPickUpObject(this);

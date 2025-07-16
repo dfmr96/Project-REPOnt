@@ -76,6 +76,7 @@ namespace PlayerScripts
                 if (pickupObject != null)
                 {
                     pickupObject.Drop(photonView);
+                    photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.MasterClient);
                 }
             }
         }
@@ -104,6 +105,7 @@ namespace PlayerScripts
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
                     interactable.Interact(photonView, ObjectId);
+                    photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.MasterClient);
                 }
             }
             else
@@ -191,7 +193,22 @@ namespace PlayerScripts
             if (IsCaptured) return;
             IsCaptured = true;
             if (pickupObject != null) pickupObject.ReturnObject(photonView);
+            GameAnalyticsHandler.TrackCapturedPlayers(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
             GameManager.Instance.RegisterCapturedMover();
+        }
+
+        [PunRPC]
+        public void RPC_HandleDropObject()
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+            GameAnalyticsHandler.TrackObjectDropped(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
+        }
+
+        [PunRPC]
+        private void RPC_HandlePlaceObect()
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+            GameAnalyticsHandler.TrackObjectPlaced(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
         }
     }
 }

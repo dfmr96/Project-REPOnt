@@ -54,6 +54,11 @@ MonoBehaviour:
   - CloseGateRPC
   - RPC_HandleDrop
   - RPC_BackToOrigin
+  - RPC_HandleAnalytics
+  - RPC_HandleDropObject
+  - RPC_HandleGhostAFK
+  - RPC_HandleMoverCapture
+  - RPC_HandlePlaceObect
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
