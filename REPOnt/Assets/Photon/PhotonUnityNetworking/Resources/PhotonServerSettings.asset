@@ -60,6 +60,7 @@ MonoBehaviour:
   - RPC_HandleMoverCapture
   - RPC_HandlePlaceObect
   - RPC_UnmarkAsCaptured
+  - RPC_BlockAnalytics
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

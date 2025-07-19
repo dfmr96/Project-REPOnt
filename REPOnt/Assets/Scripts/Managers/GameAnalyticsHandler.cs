@@ -21,7 +21,6 @@ public static class GameAnalyticsHandler
     public static void TrackMatchResult(string winningTeam, string roomName)
     {
         if (!initialized) return;
-
         DebugLogger.Log($"winnerTeam called, winner = {winningTeam} in roomName = {roomName}");
         AnalyticsService.Instance.RecordEvent(new CustomEvent("winnerTeam")
         {

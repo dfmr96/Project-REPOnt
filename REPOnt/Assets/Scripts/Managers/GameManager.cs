@@ -5,6 +5,7 @@ using Props;
 using UnityEngine;
 using Photon.Pun;
 using Unity.Collections;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -139,9 +140,18 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnded) return;
         gameEnded = true;
+
         photonView.RPC(nameof(RPC_EndGame), RpcTarget.All, isMoverWinner);
-        if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
-        photonView.RPC(nameof(RPC_HandleAnalytics), RpcTarget.All, isMoverWinner);
+
+        if (PlayerRoleHelper.IsLocalPlayerGhost())
+        {
+            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
+            string team = isMoverWinner ? "Mover" : "Ghost";
+            float matchDuration = (float)(PhotonNetwork.Time - matchStartTime);
+
+            GameAnalyticsHandler.TrackMatchDuration(matchDuration, PhotonNetwork.CurrentRoom.Name);
+            GameAnalyticsHandler.TrackMatchResult(team, PhotonNetwork.CurrentRoom.Name);
+        }
     }
     private bool HasPropsToWinReached() { return propsPlaced >= PropsToWin; }
 
@@ -166,21 +176,10 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateCapturedMovers(GetMoversCapturedCount(), PhotonNetwork.PlayerList.Length - 1);
     }
 
-    [PunRPC]
-    private void RPC_HandleAnalytics(bool isMoverWinner)
-    {
-        if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
-        string team = isMoverWinner ? "Mover" : "Ghost";
-        float matchDuration = (float)(PhotonNetwork.Time - matchStartTime);
-
-        GameAnalyticsHandler.TrackMatchDuration(matchDuration, PhotonNetwork.CurrentRoom.Name);
-        GameAnalyticsHandler.TrackMatchResult(team, PhotonNetwork.CurrentRoom.Name);
-    }
-
     // ──────────────────────────────────────────────────────────────────────────────
     // Helper Methods
     // ──────────────────────────────────────────────────────────────────────────────
-    
+
     public MoverController GetMoverByViewID(int viewID)
     {
         foreach (var mover in movers)

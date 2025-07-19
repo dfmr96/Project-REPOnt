@@ -17,6 +17,8 @@ namespace PlayerScripts
         [SerializeField] private float afkTimeThreshold = 10f;
         private Vector3 lastPosition;
         private float afkTimer = 0f;
+        private float onAfkTimer = 0f;
+        private bool isGhostAFK = false;
 
 #if UNITY_EDITOR
         [Header("Debug Highlight")] 
@@ -70,17 +72,26 @@ namespace PlayerScripts
 
             if (movedDistance <= afkDistanceThreshold)
             {
-                afkTimer += Time.deltaTime;
-
-                if (afkTimer >= afkTimeThreshold)
+                if (!isGhostAFK)
                 {
-                    photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.All);
-                    afkTimer = 0f;
+                    afkTimer += Time.deltaTime;
+
+                    if (afkTimer >= afkTimeThreshold)
+                    {
+                        isGhostAFK = true;
+                        onAfkTimer = 0f;
+                        Debug.Log("El ghost ahora está AFK");
+                    }
                 }
+                else onAfkTimer += Time.deltaTime;
             }
             else
             {
+                if (isGhostAFK) photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.All, onAfkTimer);
+
                 afkTimer = 0f;
+                onAfkTimer = 0f;
+                isGhostAFK = false;
                 lastPosition = transform.position;
             }
         }
@@ -89,10 +100,11 @@ namespace PlayerScripts
         // RPC
         // ──────────────────────────────────────────────────────────────────────────────
         [PunRPC]
-        private void RPC_HandleGhostAFK()
+        private void RPC_HandleGhostAFK(float duration)
         {
+            Debug.Log($"El ghost ya no esta afk, {duration}");
             if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
-            GameAnalyticsHandler.TrackGhostAFK(afkTimer, transform.position, PhotonNetwork.CurrentRoom.Name);
+            GameAnalyticsHandler.TrackGhostAFK(duration, transform.position, PhotonNetwork.CurrentRoom.Name);
         }
 
         // ──────────────────────────────────────────────────────────────────────────────
