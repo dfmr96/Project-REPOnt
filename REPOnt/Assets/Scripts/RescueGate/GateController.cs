@@ -11,6 +11,7 @@ namespace RescueGate
         [SerializeField] private float openHeight = 3f;
         [SerializeField] private float moveSpeed = 2f;
         [SerializeField] private float autoCloseDelay = 5f;
+        private AudioSource audioSource;
 
         private Vector3 _closedPosition;
         private Vector3 _openPosition;
@@ -28,9 +29,12 @@ namespace RescueGate
             _openPosition = _closedPosition + Vector3.up * openHeight;
         }
 
+        private void Start() { audioSource = GetComponent<AudioSource>(); }
+
         public void OpenGate()
         {
             photonView.RPC(nameof(OpenGateRPC), RpcTarget.AllBuffered);
+            audioSource.Play();
         }
 
         [PunRPC]
@@ -40,7 +44,10 @@ namespace RescueGate
             StartGateMovement(_openPosition, autoCloseDelay, () =>
             {
                 if (photonView.IsMine)
+                {
                     photonView.RPC(nameof(CloseGateRPC), RpcTarget.AllBuffered);
+                    audioSource.Play();
+                }
             });
         }
 

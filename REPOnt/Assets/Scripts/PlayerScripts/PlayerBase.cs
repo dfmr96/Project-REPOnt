@@ -11,6 +11,9 @@ public abstract class PlayerBase : MonoBehaviour
     [SerializeField] private KeyCode interactKey = KeyCode.E;
     protected float interactTimer = 0f;
     protected float speedMultiplier = 1f;
+
+    [Header("Sounds")]
+    [SerializeField] protected AudioClip interactionSound;
     
     [Header("Camera")]
     [SerializeField] private Camera playerCamera;
@@ -22,6 +25,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected PhotonView photonView;
     private Vector3 rotation = Vector3.zero;
     private float cameraAngle;
+    protected AudioSource audioSource;
     
     // ──────────────────────────────────────────────────────────────────────────────
     // Unity Methods
@@ -35,7 +39,11 @@ public abstract class PlayerBase : MonoBehaviour
             DisableCamera();
             postProcessVolume.enabled = false;
         }
-        else postProcessVolume.enabled = true;
+        else
+        {
+            postProcessVolume.enabled = true;
+            audioSource = GetComponent<AudioSource>();
+        }
     }
     protected virtual void Update()
     {

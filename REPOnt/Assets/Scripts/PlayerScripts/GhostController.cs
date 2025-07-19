@@ -1,7 +1,5 @@
 using Photon.Pun;
-using System;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace PlayerScripts
 {
@@ -63,6 +61,7 @@ namespace PlayerScripts
                 {
                     targetPV.RPC("MarkAsCaptured", RpcTarget.All);
                     targetPV.RPC(nameof(TeleportToLocation), targetPV.Owner, teleportTarget.position);
+                    PlayCaptureSound();
                 }
             }
         }
@@ -80,7 +79,6 @@ namespace PlayerScripts
                     {
                         isGhostAFK = true;
                         onAfkTimer = 0f;
-                        Debug.Log("El ghost ahora está AFK");
                     }
                 }
                 else onAfkTimer += Time.deltaTime;
@@ -95,6 +93,7 @@ namespace PlayerScripts
                 lastPosition = transform.position;
             }
         }
+        private void PlayCaptureSound() { audioSource.PlayOneShot(interactionSound); }
 
         // ──────────────────────────────────────────────────────────────────────────────
         // RPC
@@ -102,7 +101,6 @@ namespace PlayerScripts
         [PunRPC]
         private void RPC_HandleGhostAFK(float duration)
         {
-            Debug.Log($"El ghost ya no esta afk, {duration}");
             if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
             GameAnalyticsHandler.TrackGhostAFK(duration, transform.position, PhotonNetwork.CurrentRoom.Name);
         }

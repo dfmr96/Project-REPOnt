@@ -27,10 +27,10 @@ namespace PlayerScripts
         [SerializeField] private GameObject objUIPrefab;
         [SerializeField] private GameObject playerCanvasPrefab;
         [SerializeField] private AudioClip radioSound;
+        [SerializeField] private AudioClip dropSound;
         private GameObject playerCanvas;
         private GameObject micUIInstance;
         private GameObject objUIInstance;
-        private AudioSource audioSource;
         private PickupObject pickupObject = null;
 
         private Renderer currentHandObjectRenderer;
@@ -49,7 +49,6 @@ namespace PlayerScripts
             GameManager.Instance.RegisterMover(this);
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
             rec = GetComponent<Recorder>();
-            audioSource = GetComponent<AudioSource>();
             if (playerCanvas == null) playerCanvas = Instantiate(playerCanvasPrefab);
         }
 
@@ -74,6 +73,7 @@ namespace PlayerScripts
                 {
                     pickupObject.Drop(photonView);
                     photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.All, pickupObject.PropID);
+                    PlayDropSound();
                     pickupObject = null;
                 }
             }
@@ -101,7 +101,10 @@ namespace PlayerScripts
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactRange))
             {
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
+                { 
                     interactable.Interact(photonView, ObjectId);
+                    PlayPickUpSound();
+                }
             }
         }
 
@@ -171,6 +174,8 @@ namespace PlayerScripts
         // Audio Logic
         // ──────────────────────────────────────────────────────────────────────────────
         private void PlayRadioSound() { audioSource.PlayOneShot(radioSound); }
+        private void PlayPickUpSound() { audioSource.PlayOneShot(interactionSound); }
+        private void PlayDropSound() { audioSource.PlayOneShot(dropSound); }
 
         // ──────────────────────────────────────────────────────────────────────────────
         // RPC

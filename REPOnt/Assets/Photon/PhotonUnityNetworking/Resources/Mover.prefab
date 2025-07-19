@@ -5440,6 +5440,7 @@ MonoBehaviour:
   interactCooldown: 3
   data: {fileID: 11400000, guid: 8369a2ddada21cf4ea7c8025ee79bce9, type: 2}
   interactKey: 101
+  interactionSound: {fileID: 8300000, guid: c89017dc16236214480791f97cd01de1, type: 3}
   playerCamera: {fileID: 1193260903549206958}
   postProcessVolume: {fileID: 8775395429007062001}
   interactRange: 3
@@ -5449,6 +5450,7 @@ MonoBehaviour:
   objUIPrefab: {fileID: 3499231898635998325, guid: da85470b7938d974592b7c8905e30143, type: 3}
   playerCanvasPrefab: {fileID: 8208863233803983991, guid: ca35938d35f166845a8fc16cb3d50232, type: 3}
   radioSound: {fileID: 8300000, guid: f9841a210cfa24a49aecefea6f053159, type: 3}
+  dropSound: {fileID: 8300000, guid: 4634ae88bfff2e042bd6d58903c702ac, type: 3}
 --- !u!114 &1884175841466597778
 MonoBehaviour:
   m_ObjectHideFlags: 0
