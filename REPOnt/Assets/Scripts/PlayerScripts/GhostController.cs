@@ -12,7 +12,7 @@ namespace PlayerScripts
 
         [Header("Analytics Tracker")]
         [SerializeField] private float afkDistanceThreshold = 1f;
-        [SerializeField] private float afkTimeThreshold = 10f;
+        [SerializeField] private float afkTimeThreshold = 5f;
         private Vector3 lastPosition;
         private float afkTimer = 0f;
         private float onAfkTimer = 0f;
@@ -85,7 +85,7 @@ namespace PlayerScripts
             }
             else
             {
-                if (isGhostAFK) photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.All, onAfkTimer);
+                if (isGhostAFK) photonView.RPC(nameof(RPC_HandleGhostAFK), RpcTarget.All, (onAfkTimer + afkTimeThreshold));
 
                 afkTimer = 0f;
                 onAfkTimer = 0f;

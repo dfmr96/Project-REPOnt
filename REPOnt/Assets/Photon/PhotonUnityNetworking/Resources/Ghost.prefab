@@ -408,7 +408,7 @@ MonoBehaviour:
   teleportTarget: {fileID: 0}
   raycast: {fileID: 3760479331670542806}
   afkDistanceThreshold: 1
-  afkTimeThreshold: 10
+  afkTimeThreshold: 5
   debugHighlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &1111213847345604943
 MonoBehaviour:
