@@ -8,7 +8,6 @@ namespace Props
         [SerializeField] protected PropData propData;
         [SerializeField] protected Renderer rend;
         
-        //[SerializeField] protected Transform bodyTransform;
         protected GameObject newProp;
         
         public PropData PropData => propData;
@@ -50,7 +49,6 @@ namespace Props
                 }
             }
         }
-
         protected abstract Color GetAssignedColor();
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TVData
   m_EditorClassIdentifier: 
   propName: TV
-  id: 0
+  id: 4
   weight: 6
   baseColor: {r: 0.16, g: 0.5, b: 0.73, a: 1}
   dropZoneColor: {r: 0.16, g: 0.5, b: 0.73, a: 0.4}

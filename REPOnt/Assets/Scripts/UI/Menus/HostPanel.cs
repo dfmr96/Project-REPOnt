@@ -15,37 +15,27 @@ public class HostPanel : MonoBehaviour
     
     private const int RequiredPlayers = 3;
 
-
     private void OnEnable()
     {
         ConnectionManager.Instance.OnRoomJoined += HandlePlayerCount; 
         DisplayRoomId();
         UpdateUI(PhotonNetwork.CurrentRoom.PlayerCount);
     }
-    private void OnDisable()
-    {
-        ConnectionManager.Instance.OnRoomJoined -= HandlePlayerCount;
-    }
+    private void OnDisable() { ConnectionManager.Instance.OnRoomJoined -= HandlePlayerCount; }
 
     public void DisplayRoomId()
     {
         if (idText != null)
-        {
             idText.text = $"Room ID: {ConnectionManager.Instance.GetRoomId()}";
-        }
     }
     
     public void CopyRoomIdToClipboard()
     {
         string roomId = ConnectionManager.Instance.GetRoomId();
         GUIUtility.systemCopyBuffer = roomId;
-        Debug.Log($"Room ID copied to clipboard: {roomId}");
     }
 
-    private void HandlePlayerCount(int quantity)
-    {
-        UpdateUI(quantity);
-    }
+    private void HandlePlayerCount(int quantity) { UpdateUI(quantity); }
     
     private void UpdateUI(int quantity)
     {
@@ -64,8 +54,5 @@ public class HostPanel : MonoBehaviour
         }
     }
     
-    public void OnClickStartGame()
-    {
-        ConnectionManager.Instance.StartGame();
-    }
+    public void OnClickStartGame() { ConnectionManager.Instance.StartGame(); }
 }

@@ -20,7 +20,6 @@ public class OptionsPanel : MonoBehaviour
         resolutions = Screen.resolutions;
         masterSlider.value = PlayerPrefs.GetFloat("AudioMaster", 1f);
 
-        // RESOLUCIONES
         resolutionDropdown.ClearOptions();
         List<string> resolutionOptions = new List<string>();
         int savedResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
@@ -34,12 +33,10 @@ public class OptionsPanel : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
 
-        // FULLSCREEN
         bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
         fullscreenToggle.isOn = isFullscreen;
         fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
 
-        // CALIDAD
         qualityDropdown.ClearOptions();
         List<string> qualityOptions = new List<string>(QualitySettings.names);
         qualityDropdown.AddOptions(qualityOptions);
@@ -48,10 +45,8 @@ public class OptionsPanel : MonoBehaviour
         qualityDropdown.RefreshShownValue();
         qualityDropdown.onValueChanged.AddListener(SetQuality);
 
-        // AUDIO
         audioMixer.SetFloat("Volume", masterSlider.value);
 
-        // APLICAR OPCIONES GUARDADAS
         SetResolution(savedResolutionIndex);
         SetFullscreen(isFullscreen);
         QualitySettings.SetQualityLevel(savedQualityIndex);

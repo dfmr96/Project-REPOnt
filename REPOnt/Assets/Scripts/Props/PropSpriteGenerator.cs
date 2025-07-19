@@ -49,7 +49,6 @@ namespace Props
                 byte[] png = tex.EncodeToPNG();
                 string path = $"{outputFolder}/{prefab.name}.png";
                 File.WriteAllBytes(path, png);
-                Debug.Log($"🖼️ Saved isometric sprite for {prefab.name} at {path}");
 
                 DestroyImmediate(instance);
             }

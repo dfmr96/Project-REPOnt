@@ -18,28 +18,13 @@ namespace RescueGate
 
         public void Interact(PhotonView interactor, int objectId)
         {
-            Debug.Log("[GateButton] Interact called");
-
             if (interactor.TryGetComponent(out MoverController mover))
             {
-                if (mover.IsCaptured)
-                {
-                    Debug.Log("[GateButton] Mover is captured, can't open.");
-                    return;
-                }
+                if (mover.IsCaptured) return;
 
-                if (gateController.IsBusy)
-                {
-                    Debug.Log("[GateButton] Gate is currently moving or already open.");
-                    return;
-                }
+                if (gateController.IsBusy) return;
 
-                Debug.Log("[GateButton] Valid mover, opening gate.");
                 gateController.OpenGate();
-            }
-            else
-            {
-                Debug.Log("[GateButton] Interactor is not a Mover.");
             }
         }
     }

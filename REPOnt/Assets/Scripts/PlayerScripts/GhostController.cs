@@ -61,8 +61,6 @@ namespace PlayerScripts
                 {
                     targetPV.RPC("MarkAsCaptured", RpcTarget.All);
                     targetPV.RPC(nameof(TeleportToLocation), targetPV.Owner, teleportTarget.position);
-
-                    //photonView.RPC(nameof(RPC_HandleMoverCapture), RpcTarget.All, targetPV);
                 }
             }
         }
@@ -96,14 +94,6 @@ namespace PlayerScripts
             if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
             GameAnalyticsHandler.TrackGhostAFK(afkTimer, transform.position, PhotonNetwork.CurrentRoom.Name);
         }
-
-        //[PunRPC]
-        //private void RPC_HandleMoverCapture(PhotonView targetPV)
-        //{
-        //    if (!PhotonNetwork.IsMasterClient) return;
-        //    GameAnalyticsHandler.TrackCapturedPlayers(targetPV.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);
-        //}
-
 
         // ──────────────────────────────────────────────────────────────────────────────
         // Debug methods

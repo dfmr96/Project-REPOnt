@@ -28,8 +28,6 @@ public static class GameAnalyticsHandler
             { "winner", winningTeam },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'winnerTeam' sent: {winningTeam}");
     }
 
     public static void TrackMatchDuration(float durationSeconds, string roomName)
@@ -42,8 +40,6 @@ public static class GameAnalyticsHandler
             { "match_duration_seconds", durationSeconds },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'onGameFinished' sent: {durationSeconds}");
     }
 
     public static void TrackObjectPlaced(int playerId, string roomName)
@@ -56,8 +52,6 @@ public static class GameAnalyticsHandler
             { "player_id", playerId },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'onObjectDelivered' sent: {playerId}");
     }
 
     public static void TrackGhostAFK(float duration, Vector3 position, string roomName)
@@ -72,8 +66,6 @@ public static class GameAnalyticsHandler
             { "position_z", position.z },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'onGhostAFK' sent: {duration} & {position.x} & {position.z}");
     }
 
     public static void TrackCapturedPlayers(int playerId, string roomName)
@@ -86,8 +78,6 @@ public static class GameAnalyticsHandler
             { "player_id", playerId },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'onPlayerCaptured' sent: {playerId}");
     }
 
     public static void TrackUnCapturedPlayers(int playerId, string roomName)
@@ -100,8 +90,6 @@ public static class GameAnalyticsHandler
             { "player_id", playerId },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'onPlayerRescued' sent: {playerId}");
     }
 
     public static void TrackObjectDropped(int playerId, int objectId ,string roomName)
@@ -115,7 +103,5 @@ public static class GameAnalyticsHandler
             { "object_id", objectId },
             { "roomName", roomName }
         });
-
-        Debug.LogWarning($"Analytic event 'onObjectDropped' sent: {playerId}");
     }
 }

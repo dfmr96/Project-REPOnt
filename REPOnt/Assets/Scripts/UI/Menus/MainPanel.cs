@@ -13,6 +13,5 @@ public class MainPanel : MonoBehaviour
         hostButton.interactable = true;
         joinButton.interactable = true;
     }
-
     public void ExitGame() { Application.Quit(); }
 }

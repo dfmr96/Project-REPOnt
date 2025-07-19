@@ -37,8 +37,6 @@ namespace RescueGate
         public void OpenGateRPC()
         {
             if (IsBusy) return;
-
-            Debug.Log("[GateController] RPC received. Gate opening!");
             StartGateMovement(_openPosition, autoCloseDelay, () =>
             {
                 if (photonView.IsMine)
@@ -47,11 +45,7 @@ namespace RescueGate
         }
 
         [PunRPC]
-        public void CloseGateRPC()
-        {
-            Debug.Log("[GateController] RPC received. Gate closing!");
-            StartGateMovement(_closedPosition, 0f, () => OnGateClosed?.Invoke());
-        }
+        public void CloseGateRPC() { StartGateMovement(_closedPosition, 0f, () => OnGateClosed?.Invoke()); }
 
         private void StartGateMovement(Vector3 target, float delayAfter, Action onComplete)
         {

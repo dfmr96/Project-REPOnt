@@ -59,17 +59,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
     }
     public override void OnJoinRoomFailed(short returnCode, string message) { OnRoomJoinUpdated.Invoke(message); }
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount);
-        /*if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersRequired && PhotonNetwork.IsMasterClient)
-        {
-            AssignRoles();
-            
-            StartCoroutine(WaitBeforeStartingGame()); 
-            //Setear los roles es asincrono y entra en race condition usando directamente LoadLevel
-        }*/
-    }
+    public override void OnPlayerEnteredRoom(Player newPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
     public override void OnPlayerLeftRoom(Player otherPlayer) { OnRoomJoined?.Invoke(PhotonNetwork.CurrentRoom.PlayerCount); }
     
     // ──────────────────────────────────────────────────────────────────────────────
@@ -159,8 +149,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             };
 
             players[i].SetCustomProperties(roleProp);
-            
-            Debug.Log($"[AssignRoles] {nickname} assigned role: {role}");
         }
     }
     

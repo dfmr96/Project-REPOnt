@@ -31,11 +31,9 @@ namespace Props
             var mover = GameManager.Instance.GetMoverByViewID(playerViewID);
             if (mover == null) return;
 
-            // Lógica que TODOS deben ver
             mover.ObjectId = propData.ID;
             mover.ShowHandObject();
 
-            // Lógica que SOLO el dueño ve (UI)
             if (mover.GetComponent<PhotonView>().IsMine) mover.ShowObjectUI(propData.PropPreview);
 
             mover.ApplyWeightDebuff(propData.Weight);

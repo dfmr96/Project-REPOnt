@@ -68,7 +68,6 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void HandleLook()
     {
-        //100f va a ser por ahora la sensibilidad pero esto deberia cambiar para cada jugador
         rotation.x = Input.GetAxis("Mouse X") * Time.deltaTime * 100f;
         rotation.y = Input.GetAxis("Mouse Y") * Time.deltaTime * 100f;
 
@@ -86,9 +85,7 @@ public abstract class PlayerBase : MonoBehaviour
         playerCamera.enabled = false;
 
         if (playerCamera.TryGetComponent(out AudioListener listener))
-        {
             listener.enabled = false;
-        }
     }
     
     protected bool CanInteract() => interactTimer >= interactCooldown;

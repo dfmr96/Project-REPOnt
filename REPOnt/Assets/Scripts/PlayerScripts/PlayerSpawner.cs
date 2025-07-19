@@ -28,11 +28,7 @@ namespace PlayerScripts
 
         void SpawnLocalPlayer()
         {
-            if (!PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(RoleKey, out object roleObj))
-            {
-                Debug.LogWarning("No role found for player.");
-                return;
-            }
+            if (!PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(RoleKey, out object roleObj)) return;
 
             string role = roleObj.ToString();
             
@@ -45,7 +41,6 @@ namespace PlayerScripts
                     SpawnMover();
                     break;
                 default:
-                    Debug.LogWarning($"Unknown role: {role}");
                     break;
             }
         }
@@ -76,7 +71,6 @@ namespace PlayerScripts
                 if (player.CustomProperties.TryGetValue(RoleKey, out object role) && role.ToString() == MoverRole)
                     index++;
             }
-
             return index;
         }
     }

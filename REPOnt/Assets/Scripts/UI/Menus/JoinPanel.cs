@@ -70,10 +70,7 @@ public class JoinPanel : MonoBehaviour
 
     private void UpdatePlayerCount(int quantity)
     {
-        if (playersText != null)
-        {
-            playersText.text = $"Players: {quantity} / 6";
-        }
+        if (playersText != null) playersText.text = $"Players: {quantity} / 6";
     }
 
     private void OnDisable() 
@@ -121,10 +118,7 @@ public class JoinPanel : MonoBehaviour
     
     private void ClearError()
     {
-        if (errorText != null)
-        {
-            errorText.text = string.Empty;
-        }
+        if (errorText != null) errorText.text = string.Empty;
     }
     
     public void LeaveRoom()

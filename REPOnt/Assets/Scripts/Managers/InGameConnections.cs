@@ -69,7 +69,6 @@ public class InGameConnections : MonoBehaviourPunCallbacks
     {
         if (otherPlayer.CustomProperties.TryGetValue("Role", out object role) && role.ToString() == "Ghost")
         {
-            Debug.Log($"El Ghost {otherPlayer.NickName} se desconectó.");
             UIManager.Instance.AddLogMessage("El Ghost se desconectó. Esperando reconexión...", Color.red);
             Time.timeScale = 0f;
             StartCoroutine(WaitForGhostReconnect(10f));
@@ -83,31 +82,25 @@ public class InGameConnections : MonoBehaviourPunCallbacks
         isTryingToReconnect = true;
 
         reconnectAttempts = 0;
-        Debug.Log("TryToReconnect called.");
 
         yield return new WaitUntil(() => PhotonNetwork.NetworkClientState == ClientState.Disconnected);
-        Debug.Log("Cliente completamente desconectado.");
 
         while (reconnectAttempts < maxReconnectAttempts)
         {
             reconnectAttempts++;
             UIManager.Instance.AddLogMessage($"Intento de reconexión {reconnectAttempts} de {maxReconnectAttempts}",
                 Color.yellow);
-            Debug.Log($"[InGameConnections] Intentando reconectar... (Intentos: {reconnectAttempts})");
 
             if (PhotonNetwork.IsConnected)
             {
-                Debug.Log("Esperando conexión al Master Server...");
                 yield return new WaitUntil(() =>
                     PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer);
 
                 string lastRoomId = ConnectionManager.lastRoomId;
-                Debug.Log($"Reingresando a la sala {lastRoomId}...");
                 bool rejoin = PhotonNetwork.RejoinRoom(lastRoomId);
 
                 if (!rejoin)
                 {
-                    Debug.LogWarning("RejoinRoom() falló. Continuando al siguiente intento.");
                     yield return new WaitForSeconds(1f);
                     continue;
                 }
@@ -115,11 +108,9 @@ public class InGameConnections : MonoBehaviourPunCallbacks
             else
             {
                 reconnected = PhotonNetwork.ReconnectAndRejoin();
-                Debug.Log($"ReconnectAndRejoin() ejecutado. Resultado: {reconnected}");
 
                 if (!reconnected)
                 {
-                    Debug.LogWarning("ReconnectAndRejoin() falló. Continuando al siguiente intento.");
                     yield return new WaitForSeconds(1f);
                     continue;
                 }
@@ -129,7 +120,6 @@ public class InGameConnections : MonoBehaviourPunCallbacks
             while (timer < reconnectDelay)
             {
                 var state = PhotonNetwork.NetworkClientState;
-                Debug.Log($"Estado actual: {state}");
 
                 if (state == ClientState.Joined)
                 {
@@ -138,20 +128,13 @@ public class InGameConnections : MonoBehaviourPunCallbacks
                     yield break;
                 }
 
-                if (state == ClientState.Disconnected)
-                {
-                    Debug.LogWarning("Cliente volvió a estado Disconnected. Reintentando...");
-                    break;
-                }
+                if (state == ClientState.Disconnected) { break; }
 
                 timer += Time.unscaledDeltaTime;
                 yield return null;
             }
-
-            Debug.Log($"[InGameConnections] Intento {reconnectAttempts} fallido. Reintentando...)");
         }
 
-        Debug.Log("Todos los intentos de reconexión fallaron.");
         UIManager.Instance.AddLogMessage("Todos los intentos de reconexión fallaron.", Color.red);
         isTryingToReconnect = false;
         SceneManager.LoadScene("MainMenu");

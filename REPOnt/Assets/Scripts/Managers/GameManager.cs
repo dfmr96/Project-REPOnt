@@ -109,10 +109,7 @@ public class GameManager : MonoBehaviour
         EndGame(false);
     }
 
-    public void UpdateMoversCaptured()
-    {
-        photonView.RPC(nameof(RPC_UpdateCapturedPlayers), RpcTarget.All);
-    }
+    public void UpdateMoversCaptured() { photonView.RPC(nameof(RPC_UpdateCapturedPlayers), RpcTarget.All); }
     
     private int GetMoversCapturedCount()
     {

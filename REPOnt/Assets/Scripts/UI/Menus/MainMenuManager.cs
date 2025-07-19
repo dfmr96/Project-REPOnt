@@ -15,7 +15,6 @@ public class MainMenuManager : MonoBehaviour
         ConnectionManager.Instance.CreateRoom(); 
         ConnectionManager.Instance.OnRoomCreated += OnRoomCreated;
     }
-
     private void OnRoomCreated() 
     { 
         hostPanel.SetActive(true);
@@ -23,11 +22,9 @@ public class MainMenuManager : MonoBehaviour
         hostPanel.GetComponent<HostPanel>().DisplayRoomId();
         ConnectionManager.Instance.OnRoomCreated -= OnRoomCreated;
     }
-
     public void JoinRoom() 
     {
         joinPanel.SetActive(true);
         mainPanel.SetActive(false);
     }
-
 }

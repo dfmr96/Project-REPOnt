@@ -1,8 +1,8 @@
-using System;
 using Interfaces;
 using Photon.Pun;
 using Photon.Voice.Unity;
 using Props;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,10 +50,7 @@ namespace PlayerScripts
             currentHandObjectRenderer = currentHandObject.GetComponentInChildren<Renderer>();
             rec = GetComponent<Recorder>();
             audioSource = GetComponent<AudioSource>();
-            if (playerCanvas == null)
-            {
-                playerCanvas = Instantiate(playerCanvasPrefab);
-            }
+            if (playerCanvas == null) playerCanvas = Instantiate(playerCanvasPrefab);
         }
 
         protected override void Update()
@@ -77,6 +74,7 @@ namespace PlayerScripts
                 {
                     pickupObject.Drop(photonView);
                     photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.All, pickupObject.PropID);
+                    pickupObject = null;
                 }
             }
         }
@@ -102,17 +100,8 @@ namespace PlayerScripts
 
             if (Physics.Raycast(origin, direction, out RaycastHit hit, interactRange))
             {
-                Debug.DrawRay(origin, direction * interactRange, Color.blue, 1f);
-
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
-                {
                     interactable.Interact(photonView, ObjectId);
-                    //photonView.RPC(nameof(RPC_HandlePlaceObect), RpcTarget.All);
-                }
-            }
-            else
-            {
-                Debug.DrawRay(origin, direction * interactRange, Color.gray, 1f);
             }
         }
 
@@ -139,10 +128,7 @@ namespace PlayerScripts
             objUIInstance.SetActive(false);
         }
 
-        public void ApplyWeightDebuff(float weight)
-        {
-            speedMultiplier = Mathf.Clamp(1f - (weight * .05f), .3f, 1f);
-        }
+        public void ApplyWeightDebuff(float weight) { speedMultiplier = Mathf.Clamp(1f - (weight * .05f), .3f, 1f); }
 
         public void ResetSpeed() { speedMultiplier = 1f; }
 
@@ -194,7 +180,13 @@ namespace PlayerScripts
         {
             if (IsCaptured) return;
             IsCaptured = true;
-            if (pickupObject != null) pickupObject.ReturnObject(photonView);
+            if (pickupObject != null) 
+            {
+                pickupObject.ReturnObject(photonView);
+                if (PlayerRoleHelper.IsLocalPlayerGhost()) 
+                    photonView.RPC(nameof(RPC_HandleDropObject), RpcTarget.All, pickupObject.PropID);
+                pickupObject = null;
+            }
             GameManager.Instance.RegisterCapturedMover();
             if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
             GameAnalyticsHandler.TrackCapturedPlayers(photonView.Owner.ActorNumber, PhotonNetwork.CurrentRoom.Name);

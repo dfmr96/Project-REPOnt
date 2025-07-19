@@ -14,15 +14,9 @@ namespace ScriptableObjects
         [SerializeField]
         private SerializedDictionary<int, PropData> propsById;
 
-        public PropData GetByID(int id)
-        {
-            return propsById.GetValueOrDefault(id);
-        }
+        public PropData GetByID(int id) { return propsById.GetValueOrDefault(id); }
 
-        public IReadOnlyCollection<PropData> GetAll()
-        {
-            return propsById.Values;
-        }
+        public IReadOnlyCollection<PropData> GetAll() { return propsById.Values; }
         
 #if UNITY_EDITOR
         [ContextMenu("Rebuild Dictionary from List")]
@@ -33,10 +27,7 @@ namespace ScriptableObjects
             {
                 if (data == null) continue;
                 if (propsById.TryAdd(data.ID, data)) continue;
-                Debug.LogWarning($"[PropsDatabase] Duplicate ID {data.ID} found. Skipping.");
             }
-
-            Debug.Log("[PropsDatabase] Dictionary rebuilt from list successfully.");
         }
 #endif
     }

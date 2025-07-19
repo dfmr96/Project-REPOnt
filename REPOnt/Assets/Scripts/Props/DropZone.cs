@@ -7,7 +7,6 @@ namespace Props
 {
     public class DropZone : PropBehaviourBase, IInteractable
     {
-        [SerializeField] private Color placedColor = Color.green;
         private bool isPlaced = false;
         public bool IsPlaced => isPlaced;
         [SerializeField] private Light spotlight;
@@ -37,7 +36,6 @@ namespace Props
             MaterialUtils.RestoreOriginalMaterials(newProp);
             mover.DropHandObject();
             isPlaced = true;
-            //rend.material.color = placedColor;
             GameManager.Instance.RegisterPropPlaced();
         }
 
