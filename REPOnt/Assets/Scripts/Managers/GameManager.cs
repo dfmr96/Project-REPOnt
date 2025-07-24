@@ -141,17 +141,15 @@ public class GameManager : MonoBehaviour
         if (gameEnded) return;
         gameEnded = true;
 
-        photonView.RPC(nameof(RPC_EndGame), RpcTarget.All, isMoverWinner);
-
         if (PlayerRoleHelper.IsLocalPlayerGhost())
         {
-            if (!PlayerRoleHelper.IsLocalPlayerGhost()) return;
             string team = isMoverWinner ? "Mover" : "Ghost";
             float matchDuration = (float)(PhotonNetwork.Time - matchStartTime);
 
             GameAnalyticsHandler.TrackMatchDuration(matchDuration, PhotonNetwork.CurrentRoom.Name);
             GameAnalyticsHandler.TrackMatchResult(team, PhotonNetwork.CurrentRoom.Name);
         }
+        photonView.RPC(nameof(RPC_EndGame), RpcTarget.All, isMoverWinner);
     }
     private bool HasPropsToWinReached() { return propsPlaced >= PropsToWin; }
 
